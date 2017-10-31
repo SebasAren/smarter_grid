@@ -1,0 +1,6 @@
+stap 1: alle data importeren in een python datastructuur
+    waarschijnlijk als classes importeren, zodat er functies op uit te voeren zijn. Eigenschappen: postitie, max output, afstand tot batterijen, afstand tot mainkabel
+
+Ideeën: potentieel een dichtheids"wolk" maken. 
+
+https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm
