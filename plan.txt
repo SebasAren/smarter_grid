@@ -4,3 +4,4 @@ stap 1: alle data importeren in een python datastructuur
 Ideeën: potentieel een dichtheids"wolk" maken. 
 
 https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm
+https://www.youtube.com/watch?v=GazC3A4OQTE # Dijkstra's algorithm by computerphile
