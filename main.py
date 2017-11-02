@@ -7,7 +7,7 @@ class House(object):
 
 class Battery(object):
     def __init__(self, x, y, cap):
-        self.pos = [x, y]
+        self.pos = [(x, y)]
         self.capacity = cap
 
 class Grid(Battery):
@@ -16,3 +16,4 @@ class Grid(Battery):
         self.up = False
         self.right = False
         self.down = False
+        super().pos.append((x, y))
