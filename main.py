@@ -1,19 +1,16 @@
 # main.py
 
 class House(object):
-    def __init__(self, x, y, output):
+    
+    def __init__(self, pos, output):
         self.pos = (x, y)
         self.output = output
 
 class Battery(object):
-    def __init__(self, x, y, cap):
-        self.pos = [(x, y)]
+
+    def __init__(self, pos, cap):
+        self.pos = pos
         self.capacity = cap
 
-class Grid(Battery):
-    def __init__(self, x, y):
-        self.left = False
-        self.up = False
-        self.right = False
-        self.down = False
-        super().pos.append((x, y))
+    def add_grid_line(self, pos):
+        pass
