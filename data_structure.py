@@ -1,10 +1,9 @@
 # data_structure.py
 import csv
-import sys
 
 class Grid(object):
 
-    # potential matrix for a grid
+    # potential matrix for a grid (unused this far)
     def __init__(self, N, M):
         self.matrix = [[0 for i in range(M)] for j in range(N)]
 
@@ -23,6 +22,7 @@ class Battery(object):
 
 class House(object):
 
+    # house has power and position
     def __init__(self, x, y, power):
         self.power = power
         self.position = (x, y)
@@ -31,8 +31,12 @@ class House(object):
 def read_csv(f, house=False):
     reader = csv.reader(f)
     rv = []
+
+    # skip headers
     next(reader, None)
     for row in reader:
+
+        # create either a house or a battery
         if house:
             entry = House(int(row[0]), int(row[1]), float(row[2]))
         else:
@@ -40,8 +44,10 @@ def read_csv(f, house=False):
         rv.append(entry)
     return rv
 
+# this is mainly for testing purposes
 if __name__ == '__main__':
-    
+    import sys
+
     # create a list of houses
     with open('data/{}_huizen.csv'.format(sys.argv[1])) as f:
         houses = read_csv(f, house=True)
