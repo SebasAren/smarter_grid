@@ -1,5 +1,6 @@
 # data_structure.py
 import csv
+import sys
 
 class Grid(object):
 
@@ -30,6 +31,7 @@ class House(object):
 def read_csv(f, house=False):
     reader = csv.reader(f)
     rv = []
+    next(reader, None)
     for row in reader:
         if house:
             entry = House(int(row[0]), int(row[1]), float(row[2]))
@@ -41,9 +43,9 @@ def read_csv(f, house=False):
 if __name__ == '__main__':
     
     # create a list of houses
-    with open('data/wijk1_huizen.csv') as f:
+    with open('data/{}_huizen.csv'.format(sys.argv[1])) as f:
         houses = read_csv(f, house=True)
 
     # and batteries
-    with open('data/wijk1_batterijen.csv') as f:
+    with open('data/{}_batterijen.csv'.format(sys.argv[1])) as f:
         batteries = read_csv(f)
