@@ -1,6 +1,5 @@
 # data_structure.py
 import csv
-import re
 
 class Grid(object):
 
@@ -11,7 +10,7 @@ class Grid(object):
 class Battery(object):
     
     # battery has capacity, position and list of connected houses
-    def __init__(self, capacity, x, y):
+    def __init__(self, x, y, capacity):
         self.capacity = capacity
         self.position = (x, y)
         self.houses = []
@@ -19,7 +18,7 @@ class Battery(object):
     # house should be a house object
     def connect_house(self, house):
         self.houses.append(house)
-        self.capacity -= house.capacity
+        self.capacity -= house.power
 
 class House(object):
 
@@ -27,31 +26,24 @@ class House(object):
         self.power = power
         self.position = (x, y)
 
-# store batteries 
-def read_batteries(f):
-    batteries = []
-    for row in f:
-        x = int(re.sub("[^0-9]", "", row[:3]))
-        y = int(re.sub("[^0-9]", "", row[5:9]))
-        capacity = float(re.sub("[^0-9]", "", row[9:]))
-        battery = Battery(capacity, x, y)
-        batteries.append(battery)
-    return batteries
-
-# store houses
-def read_houses(f):
+# read data
+def read_csv(f, house=False):
     reader = csv.reader(f)
-    houses = []
+    rv = []
     for row in reader:
-        house = House(int(row[0]), int(row[1]), float(row[2]))
-        houses.append(house)
-    return houses
+        if house:
+            entry = House(int(row[0]), int(row[1]), float(row[2]))
+        else:
+            entry = Battery(int(row[0]), int(row[1]), float(row[2]))
+        rv.append(entry)
+    return rv
 
 if __name__ == '__main__':
     
     # create a list of houses
     with open('data/wijk1_huizen.csv') as f:
-        houses = read_houses(f)
+        houses = read_csv(f, house=True)
 
-    with open('data/wijk1_batterijen.txt') as f:
-        batteries = read_batteries(f)
+    # and batteries
+    with open('data/wijk1_batterijen.csv') as f:
+        batteries = read_csv(f)
