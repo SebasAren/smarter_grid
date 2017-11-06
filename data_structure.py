@@ -3,7 +3,7 @@ import csv
 
 class Grid(object):
 
-    # potential matrix for a grid (unused this far)
+    # potential matrix for a grid (unused thus far)
     def __init__(self, N, M):
         self.matrix = [[0 for i in range(M)] for j in range(N)]
 
