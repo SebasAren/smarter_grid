@@ -1,5 +1,6 @@
 # data_structure.py
 import csv
+from binpackp import NumberBin, Fit
 
 class Grid(object):
 
@@ -55,3 +56,19 @@ if __name__ == '__main__':
     # and batteries
     with open('data/{}_batterijen.csv'.format(sys.argv[1])) as f:
         batteries = read_csv(f)
+
+    # define bin size for binpack module
+    # multiplication is needed because of int requirement for bin packing
+    # problem
+    bin_size = int(batteries[0].capacity * 100000000)
+
+    # create a list of houses to be fit
+    fit_these = [int(house.power * 100000000) for house in houses]
+
+    # get both results
+    generic_results = Fit.fit(NumberBin, bin_size, fit_these)
+    first_fit_results = Fit.ff(NumberBin, bin_size, fit_these)
+
+    # print output
+    print('General Function: ', generic_results)
+    print('First Fit Function: ', first_fit_results)
