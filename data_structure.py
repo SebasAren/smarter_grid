@@ -72,3 +72,6 @@ if __name__ == '__main__':
     # print output
     print('General Function: ', generic_results)
     print('First Fit Function: ', first_fit_results)
+
+    for el in first_fit_results._cache["bins"]:
+        print(el)
