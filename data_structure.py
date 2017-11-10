@@ -2,6 +2,32 @@
 import csv
 from binpackp import NumberBin, Fit
 
+class Cable(object):
+
+    def __init__(self):
+        # if only points in grid can be accessed
+        self.position1 = [x, y]
+        self.position2 = [x, y]
+        # list of connected houses
+        self.houses = []
+        self.capacity = 0
+        self.connected = False
+        self.connected_battery = None
+
+        # battery should be battery object
+        def connect_battery(self, battery):
+            self.connected = True
+            self.connect_battery = battery
+            self.capacity = battery.capacity
+
+        # without this, it won't update when connecting a new house
+        def update_capacity(self, battery):
+            self.capacity = battery.capacity
+
+        # house should be a house object
+        def connect_house(self, house):
+            self.houses.append(house)
+
 class Grid(object):
 
     # potential matrix for a grid (unused thus far)
@@ -13,7 +39,7 @@ class Battery(object):
     # battery has capacity, position and list of connected houses
     def __init__(self, x, y, capacity):
         self.capacity = capacity
-        self.position = (x, y)
+        self.position = [x, y]
         self.houses = []
 
     # house should be a house object
