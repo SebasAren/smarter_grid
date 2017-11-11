@@ -4,29 +4,30 @@ from binpackp import NumberBin, Fit
 
 class Cable(object):
 
-    def __init__(self):
+    def __init__(self, x, y):
         # if only points in grid can be accessed
         self.position1 = [x, y]
         self.position2 = [x, y]
+        
         # list of connected houses
         self.houses = []
         self.capacity = 0
         self.connected = False
         self.connected_battery = None
 
-        # battery should be battery object
-        def connect_battery(self, battery):
-            self.connected = True
-            self.connect_battery = battery
-            self.capacity = battery.capacity
+    # battery should be battery object
+    def connect_battery(self, battery):
+        self.connected = True
+        self.connect_battery = battery
+        self.capacity = battery.capacity
 
-        # without this, it won't update when connecting a new house
-        def update_capacity(self, battery):
-            self.capacity = battery.capacity
+    # without this, it won't update when connecting a new house
+    def update_capacity(self, battery):
+        self.capacity = battery.capacity
 
-        # house should be a house object
-        def connect_house(self, house):
-            self.houses.append(house)
+    # house should be a house object
+    def connect_house(self, house):
+        self.houses.append(house)
 
 class Grid(object):
 
