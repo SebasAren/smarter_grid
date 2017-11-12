@@ -1,16 +1,25 @@
 # main.py
 
-class House(object):
-    
-    def __init__(self, pos, output):
-        self.pos = (x, y)
-        self.output = output
+import data_structure
+import data_generator
+from binpackp import NumberBin, Fit
 
-class Battery(object):
+if __name__ == '__main__':
+    matrix = data_generator.generate_grid(150, 5, 50, 50)
 
-    def __init__(self, pos, cap):
-        self.pos = pos
-        self.capacity = cap
+    batteries = []
+    houses = []
+    for row in matrix:
+        for el in row:
+            if el > 0:
+                houses.append(el)
+            elif el < 0:
+                batteries.append(el)
 
-    def add_grid_line(self, pos):
-        pass
+    bin_size = batteries[0] * -1
+
+    generic_results = Fit.fit(NumberBin, bin_size, houses)
+    first_fit_results = Fit.ff(NumberBin, bin_size, houses)
+
+    print('General function: ', generic_results)
+    print('First Fit Function', first_fit_results)
