@@ -4,10 +4,11 @@ from binpackp import NumberBin, Fit
 
 class Cable(object):
 
-    def __init__(self):
+    # the amount of arguments gets ugly as hell quick
+    def __init__(self, x1, y1, x2, y2):
         # if only points in grid can be accessed
-        self.position1 = [x, y]
-        self.position2 = [x, y]
+        self.position1 = [x1, y1]
+        self.position2 = [x2, y2]
         # list of connected houses
         self.houses = []
         self.capacity = 0
@@ -83,21 +84,4 @@ if __name__ == '__main__':
     with open('data/{}_batterijen.csv'.format(sys.argv[1])) as f:
         batteries = read_csv(f)
 
-    # define bin size for binpack module
-    # multiplication is needed because of int requirement for bin packing
-    # problem
-    bin_size = int(batteries[0].capacity * 100000000)
-
-    # create a list of houses to be fit
-    fit_these = [int(house.power * 100000000) for house in houses]
-
-    # get both results
-    generic_results = Fit.fit(NumberBin, bin_size, fit_these)
-    first_fit_results = Fit.ff(NumberBin, bin_size, fit_these)
-
-    # print output
-    print('General Function: ', generic_results)
-    print('First Fit Function: ', first_fit_results)
-
-    for el in first_fit_results._cache["bins"]:
-        print(el)
+   
