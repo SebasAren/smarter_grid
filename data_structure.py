@@ -2,6 +2,53 @@
 import csv
 from binpackp import NumberBin, Fit
 
+class Grid(object):
+
+    # potential matrix for a grid (unused thus far)
+    def __init__(self, N, M):
+        self.matrix = [[[] for i in range(N)] for j in range(M)]
+
+    def append_structure(self, structure):
+        self.matrix[structure.position[0]][structure.position[1]].append(structure)
+
+    def __repr__(self):
+        # rv = ''
+        pre_rv = ['[']
+        for row in self.matrix:
+            pre_rv.append('[')
+            for el in row:
+                pre_rv.append(str(el) + ', ')
+            pre_rv.append('], ')
+        rv = ''.join(pre_rv)
+        return rv
+
+# Grid point (if we decide to use this)
+class Node(object):
+
+    def __init__(self, x, y):
+        self.position = (x, y)
+        self.capacity = 0
+        self.structure = False
+        self.connected_battery = None
+        self.houses = []
+
+    def place_house(self, house):
+        self.structure = True
+        self.capacity -= house.power
+        self.houses.append(house)
+
+    def place_battery(self, battery):
+        self.structure = True
+        self.capacity = battery.capacity
+        self.connected_battery = battery.id
+
+    def connect_cable(self, cable):
+        self.capacity = cable.capacity
+        self.connected_battery = cable.connected_battery
+        self.houses = cable.houses
+
+    def __repr__(self):
+        return str(self.position)
 
 class Battery(object):
     
@@ -66,32 +113,3 @@ if __name__ == '__main__':
     # and batteries
     with open('data/{}_batterijen.csv'.format(sys.argv[1])) as f:
         batteries = read_csv(f)
-
-# class Cable(object):
-
-#     # the amount of arguments gets ugly as hell quick
-#     def __init__(self, x1, y1, x2, y2):
-
-#         # if only points in grid can be accessed
-#         self.position1 = [x1, y1]
-#         self.position2 = [x2, y2]
-
-#         # list of connected houses
-#         self.houses = []
-#         self.capacity = 0
-#         self.connected = False
-#         self.connected_battery = None
-
-#     # battery should be battery object
-#     def connect_battery(self, battery):
-#         self.connected = True
-#         self.connect_battery = battery
-#         self.capacity = battery.capacity
-
-#     # without this, it won't update when connecting a new house
-#     def update_capacity(self, battery):
-#         self.capacity = battery.capacity
-
-#     # house should be a house object
-#     def connect_house(self, house):
-#         self.houses.append(house)
