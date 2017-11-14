@@ -1,23 +1,33 @@
 # main.py
 
-from data_structure import Grid, Battery, House
+from data_structure import Battery, House, read_csv
 import data_generator
+from itertools import combinations, chain
 
 WIDTH = 1
 HEIGHT = 2
 
+def brute_force_solution(houses, batteries):
+    cost = 0
+    best_cost = 0
+
+
+    for el in [x for l in range(1, len(houses) + 1) for x in combinations(houses, l)]:
+        
+
+
 if __name__ == '__main__':
+    import sys
 
-    matrix = data_generator.generate_grid(1, 1, WIDTH, HEIGHT)
-    print(matrix)
-    grid = Grid(WIDTH, HEIGHT)
+    # create a list of houses
+    with open('data/test_wijk/{}_huizen.csv'.format(sys.argv[1])) as f:
+        houses = read_csv(f, house=True)
 
-    for i, row in enumerate(matrix):
-        for j, el in enumerate(row):
-            if el > 0:
-                house = House(i, j, el)
-                grid.append_structure(house)
-            elif el < 0:
-                battery = Battery(i, j, -el)
-                grid.append_structure(battery)
-    print(grid)
+    # and batteries
+    with open('data/test_wijk/{}_batterijen.csv'.format(sys.argv[1])) as f:
+        batteries = read_csv(f)
+
+    # print(houses)
+    # print(batteries)
+
+    brute_force_solution(houses, batteries)
