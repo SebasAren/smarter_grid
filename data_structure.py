@@ -1,4 +1,5 @@
 # data_structure.py
+
 import csv
 from binpackp import NumberBin, Fit
 
@@ -22,9 +23,9 @@ class Grid(object):
         rv = ''.join(pre_rv)
         return rv
 
-# Grid point (if we decide to use this)
-class Node(object):
 
+class Node(object):
+# Grid point (if we decide to use this)
     def __init__(self, x, y):
         self.position = (x, y)
         self.capacity = 0
@@ -42,13 +43,14 @@ class Node(object):
         self.capacity = battery.capacity
         self.connected_battery = battery.id
 
+    def __repr__(self):
+        return str(self.position)
+
     def connect_cable(self, cable):
         self.capacity = cable.capacity
         self.connected_battery = cable.connected_battery
         self.houses = cable.houses
 
-    def __repr__(self):
-        return str(self.position)
 
 class Battery(object):
     
@@ -80,10 +82,16 @@ class Battery(object):
         dis_y = abs(self.position[1] - house.position[1])
         return dis_x + dis_y
 
+    def __repr__(self):
+        return str(self.capacity_original)
+
 class House(object):
     def __init__(self, x, y, power):
         self.position = (x, y)
         self.power = power
+
+    def __repr__(self):
+        return str(self.power)
 
 # read data
 def read_csv(f, house=False):
