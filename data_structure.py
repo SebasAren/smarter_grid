@@ -12,30 +12,32 @@ class Grid(object):
         self.grid = np.array(matrix)
 
 
-    
+class Cable(object):
+    def __init__(self, battery):
+
+        # clockwise: 0 is up
+        self.direction = {0: False, 1: False, 2: False, 3: False}
+        self.battery = battery
+
+    def add_direction(self, direction):
+        self.direction[direction] = True
 
 class Node(object):
 
 # Grid point (if we decide to use this)
     def __init__(self):
-        self.capacity = 0
-        self.cable = False
-        self.connected_cables = []
-        self.house = False
-        self.battery = False
-        self.connected_battery = None
-        self.houses = []
+        self.cable = []
+        self.house = None
+        self.battery = None
 
     def place_house(self, house):
-        self.house = True
-        self.capacity -= house.power
-        self.houses.append(house)
+        self.house = house
 
     def place_battery(self, battery):
-        self.battery = True
-        self.capacity = battery.capacity
-        self.connected_battery = battery.id
+        self.battery = battery
 
+    def place_cable(self, cable):
+        self.cable.append(cable)
 
 
 class Battery(object):
