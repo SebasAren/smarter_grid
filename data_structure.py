@@ -2,7 +2,6 @@
 
 import csv
 import numpy as np
-from binpackp import NumberBin, Fit
 
 class Grid(object):
 
@@ -11,16 +10,37 @@ class Grid(object):
         matrix = [[Node() for i in range(x)] for j in range(y)]
         self.grid = np.array(matrix)
 
+    # path should be a list of consecutive directions
+    # begin should be a list starting at a battery
+    # TODO: Make it work when there is already a cable of the same battery
+    def connect_nodes(self, begin, path):
 
-class Cable(object):
-    def __init__(self, battery):
+        # first get a 'pointer' to the correct battery
+        battery = self.grid[begin[0]][begin[1]].battery
 
-        # clockwise: 0 is up
-        self.direction = {0: False, 1: False, 2: False, 3: False}
-        self.battery = battery
+        # go over all directions in the path
+        for direction in path:
 
-    def add_direction(self, direction):
-        self.direction[direction] = True
+            # place cable at
+            self.grid[begin[0]][begin[1]].place_cable(Cable(battery, direction))
+
+            if direction == 0:
+                begin[1] -= 1
+            elif direction == 1:
+                begin[0] += 1
+            elif direction == 2:
+                begin[1] += 1
+            else:
+                begin[0] -= 1
+
+
+            if direction > 1:
+                next_direction = direction - 2
+            else: 
+                next_direction = direction + 2
+
+            self.grid[begin[0]][begin[1]].place_cable(Cable(battery, next_direction))
+
 
 class Node(object):
 
@@ -28,7 +48,7 @@ class Node(object):
     def __init__(self):
         self.cable = []
         self.house = None
-        self.battery = None
+        self.battery = None 
 
     def place_house(self, house):
         self.house = house
@@ -38,6 +58,18 @@ class Node(object):
 
     def place_cable(self, cable):
         self.cable.append(cable)
+
+
+class Cable(object):
+    def __init__(self, battery, direction):
+
+        # clockwise: 0 is up
+        self.directions = {0: False, 1: False, 2: False, 3: False}
+        self.directions[direction] = True
+        self.battery = battery
+
+    def add_direction(self, direction):
+        self.directions[direction] = True
 
 
 class Battery(object):
@@ -99,14 +131,7 @@ def read_csv(f, house=False):
         rv.append(entry)
     return rv
 
-# this is mainly for testing purposes
 if __name__ == '__main__':
-    import sys
 
-    # create a list of houses
-    with open('data/{}_huizen.csv'.format(sys.argv[1])) as f:
-        houses = read_csv(f, house=True)
-
-    # and batteries
-    with open('data/{}_batterijen.csv'.format(sys.argv[1])) as f:
-        batteries = read_csv(f)
+    test = Grid(10, 10)
+    test.connect_nodes()
