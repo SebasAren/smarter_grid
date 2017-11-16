@@ -1,31 +1,21 @@
 # data_structure.py
 
 import csv
+import numpy as np
 from binpackp import NumberBin, Fit
 
 class Grid(object):
 
-    # potential matrix for a grid (unused thus far)
-    def __init__(self, N, M):
-        self.matrix = [[[] for i in range(N)] for j in range(M)]
+    # initialize the grid with a numpy 2d-array which consists of nodes 
+    def __init__(self, x, y):
+        matrix = [[Node() for i in range(x)] for j in range(y)]
+        self.grid = np.array(matrix)
 
-    def append_structure(self, structure):
-        self.matrix[structure.position[0]][structure.position[1]].append(structure)
 
-    def __repr__(self):
-        # rv = ''
-        pre_rv = ['[']
-        for row in self.matrix:
-            pre_rv.append('[')
-            for el in row:
-                pre_rv.append(str(el) + ', ')
-            pre_rv.append('], ')
-        rv = ''.join(pre_rv)
-        return rv
-
+    
 
 class Node(object):
-# Grid point (if we decide to use this)
+# grid point (if we decide to use this)
     def __init__(self, x, y):
         self.position = (x, y)
         self.capacity = 0
