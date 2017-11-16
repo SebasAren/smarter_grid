@@ -36,9 +36,6 @@ class Node(object):
         self.capacity = battery.capacity
         self.connected_battery = battery.id
 
-    def __repr__(self):
-        return str(self.position)
-
 
 
 class Battery(object):
