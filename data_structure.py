@@ -15,37 +15,37 @@ class Grid(object):
     
 
 class Node(object):
-# grid point (if we decide to use this)
-    def __init__(self, x, y):
-        self.position = (x, y)
+
+# Grid point (if we decide to use this)
+    def __init__(self):
         self.capacity = 0
-        self.structure = False
+        self.cable = False
+        self.connected_cables = []
+        self.house = False
+        self.battery = False
         self.connected_battery = None
         self.houses = []
 
     def place_house(self, house):
-        self.structure = True
+        self.house = True
         self.capacity -= house.power
         self.houses.append(house)
 
     def place_battery(self, battery):
-        self.structure = True
+        self.battery = True
         self.capacity = battery.capacity
         self.connected_battery = battery.id
 
     def __repr__(self):
         return str(self.position)
 
-    def connect_cable(self, cable):
-        self.capacity = cable.capacity
-        self.connected_battery = cable.connected_battery
-        self.houses = cable.houses
 
 
 class Battery(object):
     
     # battery has capacity, position and list of connected houses
     def __init__(self, x, y, capacity):
+        self.id = None
         self.capacity_original = capacity
         self.capacity = capacity
         self.position = [x, y]
