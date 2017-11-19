@@ -1,26 +1,53 @@
 import data_structure
 import data_generator
-
+import numpy as np
+import sys 
 import matplotlib.pyplot as plt
 
-x = [1, 2]
-y = [5, 10]
+# lists of coördinates of the houses
+x = []
+y= []
 
-x1 = [2, 4]
-y1 = [3, 3]
+# lists of coördinates of the batteries
+x1 = []
+y1 = []
 
 
-plt.scatter(x, y, color= 'k', marker = '^', s = 50)
+# append x coördinates of the houses in list
+for house in houses:
+	x.append('TODO')
 
-plt.scatter(x1, y1, color= 'k', marker = 'x', s = 50)
+# append y coördinates of the houses in list
+for house in houses: 
+	y.append('TODO')
 
+# append x coördinates of the batteries in list
+for batterie in batteries:
+	x1.append('TODO')
+
+# append y coördinates of the batteries in list
+for batterie in batteries:
+	y1.append('TODO')	
+
+# plot the houses 
+plt.scatter(x, y, color= 'k', marker = '^', s = 50, label = 'houses')
+# plot the batteries
+plt.scatter(x1, y1, color= 'k', marker = 'x', s = 50, label = 'batteries')
+
+# add grid to graph
 plt.grid(b = True, axis = 'both')
 
-plt.axis((0,5,0,10))
+# scale the x and y axis
+# dit moet ook nog afhankelijk worden van welke grid je kiest
+plt.xticks(np.arange(0, 50, 1))
+plt.yticks(np.arange(0, 50, 1))
 
+# lables for x and y axis and title
+plt.ylabel('y')
 plt.xlabel('x')
-plt.xlabel('y')
-plt.title('test_wijk')
+# TITEL MOET AFHANKELIJK ZIJN VAN DE WIJK, DUS MOET NOG AANGEPAST WORDEN
+# waarschijnlijk iets van plt.title(sys.argv[1]) ofzoiets
+plt.title('test_wijk1')
 plt.legend()
 plt.show()
 
