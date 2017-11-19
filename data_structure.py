@@ -10,41 +10,52 @@ class Grid(object):
         matrix = [[Node() for i in range(x)] for j in range(y)]
         self.grid = np.array(matrix)
 
-    # path should be a list of consecutive directions
-    # begin should be a list starting at a battery
-    # TODO: Make it work when there is already a cable of the same battery
-    def connect_nodes(self, begin, path):
+   
+    def connect_nodes(self, x, y, direction):
+        # create new cable object
+        new_cable = Cable()
+        self.grid[x][y].place_cable(new_cable)
+        self.grid[x][y].cable[-1].directions[direction] = True
 
-        # first get a 'pointer' to the correct battery
-        battery = self.grid[begin[0]][begin[1]].battery
+        # create cable object at neighbouring node
+        # yes all these ifs are ugly but bear with me I'm trying
+        if direction == 0:
+            try:
+                neighbour_cable = Cable()
+                self.grid[x][y+1].place_cable(neighbour_cable)
+                self.grid[x][y+1].cable[-1].directions[(direction + 2) % 4] = True
+            except IndexError:
+                pass
 
-        # go over all directions in the path
-        for direction in path:
+        if direction == 1:
+            try:
+                neighbour_cable = Cable()
+                self.grid[x+1][y].place_cable(neighbour_cable)
+                self.grid[x+1][y].cable[-1].directions[(direction + 2) % 4] = True
+            except IndexError:
+                pass   
 
-            # place cable at
-            self.grid[begin[0]][begin[1]].place_cable(Cable(battery, direction))
+        if direction == 2:
+            try:
+                neighbour_cable = Cable()
+                self.grid[x][y-1].place_cable(neighbour_cable)
+                self.grid[x][y-1].cable[-1].directions[(direction + 2) % 4] = True
+            except IndexError:
+                pass
 
-            if direction == 0:
-                begin[1] -= 1
-            elif direction == 1:
-                begin[0] += 1
-            elif direction == 2:
-                begin[1] += 1
-            else:
-                begin[0] -= 1
-
-
-            if direction > 1:
-                next_direction = direction - 2
-            else: 
-                next_direction = direction + 2
-
-            self.grid[begin[0]][begin[1]].place_cable(Cable(battery, next_direction))
+        if direction == 3:
+            try:
+                neighbour_cable = Cable()
+                self.grid[x-1][y].place_cable(neighbour_cable)
+                self.grid[x-1][y].cable[-1].directions[(direction + 2) % 4] = True
+            except IndexError:
+                pass
+        
 
 
 class Node(object):
 
-# Grid point (if we decide to use this)
+# this is the object that is found on every grid point
     def __init__(self):
         self.cable = []
         self.house = None
@@ -61,15 +72,16 @@ class Node(object):
 
 
 class Cable(object):
-    def __init__(self, battery, direction):
+    def __init__(self):
 
         # clockwise: 0 is up
+        # every cable can only have one direction
         self.directions = {0: False, 1: False, 2: False, 3: False}
-        self.directions[direction] = True
-        self.battery = battery
+        self.battery = None
 
-    def add_direction(self, direction):
-        self.directions[direction] = True
+        def connect_battery(self, battery):
+            #TODO
+            return False
 
 
 class Battery(object):
@@ -131,7 +143,5 @@ def read_csv(f, house=False):
         rv.append(entry)
     return rv
 
-if __name__ == '__main__':
-
-    test = Grid(10, 10)
-    test.connect_nodes()
+if __name__ == "__main__":
+    grid = Grid(4,4)
