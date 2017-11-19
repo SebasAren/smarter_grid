@@ -80,8 +80,7 @@ class Cable(object):
         self.battery = None
 
         def connect_battery(self, battery):
-            #TODO
-            return False
+            self.battery = battery
 
 
 class Battery(object):
