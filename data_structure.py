@@ -27,7 +27,7 @@ class Grid(object):
             except IndexError:
                 pass
 
-        if direction == 1:
+        else if direction == 1:
             try:
                 neighbour_cable = Cable()
                 self.grid[x+1][y].place_cable(neighbour_cable)
@@ -35,7 +35,7 @@ class Grid(object):
             except IndexError:
                 pass   
 
-        if direction == 2:
+        else if direction == 2:
             try:
                 neighbour_cable = Cable()
                 self.grid[x][y-1].place_cable(neighbour_cable)
@@ -43,7 +43,7 @@ class Grid(object):
             except IndexError:
                 pass
 
-        if direction == 3:
+        else if direction == 3:
             try:
                 neighbour_cable = Cable()
                 self.grid[x-1][y].place_cable(neighbour_cable)
@@ -141,6 +141,3 @@ def read_csv(f, house=False):
             entry = Battery(int(row[0]), int(row[1]), float(row[2]))
         rv.append(entry)
     return rv
-
-if __name__ == "__main__":
-    grid = Grid(4,4)
