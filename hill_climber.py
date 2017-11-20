@@ -4,9 +4,11 @@ import data_structure
 import numpy as np
 import random
 
+# custom error for contraint checking
 class ConstraintError(Exception):
     pass
 
+# manhattan distance between 2 tuples/lists
 def distance(pos1, pos2):
     return abs(pos1[0] - pos2[0]) + abs(pos1[1] - pos2[1])
 
@@ -14,31 +16,86 @@ def distance(pos1, pos2):
 class HillClimber(object):
  
     def __init__(self, houses, batteries):
+
+        self.cost_values = [0 for i in range(len(batteries))]
         self.houses = houses
 
         # lambda works like a JS 'callback' it returns a value buried 
         # within the data structure
         self.houses.sort(key = lambda x: x.power, reverse=True)
 
+        # give houses id's
+        for i, house in enumerate(self.houses):
+            house.give_id(i)
+
+        # give batteries id's
         self.batteries = batteries
+        for j, battery in enumerate(self.batteries):
+            battery.give_id(j)
+
+        # set distance of houses to other houses (house.id is index)
         self.distance_houses = np.array([[distance(i.position, j.position) for\
             i in self.houses] for j in self.houses])
 
-        # distance_batteries[battery][house]
+        # distance_batteries[battery.id][house.id]
         self.distance_batteries = np.array([[distance(i.position, j.position)\
             for i in self.houses] for j in self.batteries])
 
+
+    # check total value inside bin
     def size_of_bin(self, bucket):
         rv = 0
         for el in bucket:
             rv += el.power
         return rv
 
-    def contraint_check(self, bucket, b_type=0):
-        if size_of_bin(bucket) > self.bin_size[b_type]:
+    # check contstraint
+    def constraint_check(self, bucket, b_type=0):
+        if self.size_of_bin(bucket) > self.bin_size[b_type]:
             raise ConstraintError
         else:
             pass
+
+    def distance_check(self, bucket, battery_id):
+        cost_values = 0
+        for i, house in enumerate(bucket):
+            smallest = self.distance_batteries[battery_id][house.id]
+            for j in range(i + 1, len(bucket)):
+                if self.distance_houses[house.id][bucket[j].id] < smallest:
+                    smallest = self.distance_houses[house.id][bucket[j].id]
+            cost_values += smallest
+        return cost_values
+
+    def swap_houses(self):
+        bin_1 = random.randrange(len(self.bins))
+        bin_2 = bin_1
+        while bin_2 == bin_1:
+            bin_2 = random.randrange(len(self.bins))
+
+        house_1 = random.randrange(len(self.bins[bin_1]))
+        house_2 = random.randrange(len(self.bins[bin_2]))        
+
+        # swap houses
+        self.bins[bin_1][house_1], self.bins[bin_2][house_2] = self.bins[bin_2][house_2], self.bins[bin_1][house_1]
+
+        # check constraints, else swap them back and break function
+        try:
+            self.constraint_check(self.bins[bin_1])
+            self.constraint_check(self.bins[bin_2])
+        except ConstraintError:
+            self.bins[bin_1][house_1], self.bins[bin_2][house_2] = self.bins[bin_2][house_2], self.bins[bin_1][house_1]
+            return False
+
+        check_1 = self.distance_check(self.bins[bin_1], bin_1)
+        check_2 = self.distance_check(self.bins[bin_2], bin_2)
+        if (check_1 + check_2) < (self.cost_values[bin_1] + self.cost_values[bin_2]):
+            self.cost_values[bin_1] = check_1
+            self.cost_values[bin_2] = check_2
+            return True
+        else:
+            self.bins[bin_1][house_1], self.bins[bin_2][house_2] = self.bins[bin_2][house_2], self.bins[bin_1][house_1]
+            return False
+
 
     # function to start the optimization
     def first_fit(self):
@@ -48,14 +105,21 @@ class HillClimber(object):
 
         # make a list of bins
         self.bins = [[] for i in range(len(self.batteries))]
-        for house in self.houses:
-            lowest = self.bin_size[0]
-            for i, el in enumerate(self.bins):
-                current = self.size_of_bin(el)
-                if current < lowest:
-                    lowest = current
-                    bin_place = i
-            self.bins[bin_place].append(house)
+        try:
+            for house in self.houses:
+                lowest = self.bin_size[0]
+                for i, el in enumerate(self.bins):
+                    current = self.size_of_bin(el)
+                    if current < lowest:
+                        lowest = current
+                        bin_place = i
+                self.bins[bin_place].append(house)
+                self.constraint_check(self.bins[bin_place])
+        except ConstraintError:
+            exit('First fit failed!')
+
+        for i, el in enumerate(self.bins):
+            self.cost_values[i] = self.distance_check(el, i)
 
 
 if __name__ == '__main__':
@@ -67,3 +131,12 @@ if __name__ == '__main__':
 
     hill = HillClimber(houses, batteries)
     hill.first_fit()
+
+    faults = 0
+    while faults < 10000:
+        if not hill.swap_houses():
+            faults += 1
+            hill.cost_values
+        else:
+            faults = 0
+            print(hill.cost_values)
