@@ -86,8 +86,8 @@ class Cable(object):
 class Battery(object):
     
     # battery has capacity, position and list of connected houses
-    def __init__(self, x, y, capacity):
-        self.id = None
+    def __init__(self, x, y, capacity, i):
+        self.id = i
         self.capacity_original = capacity
         self.capacity = capacity
         self.position = [x, y]
@@ -118,7 +118,8 @@ class Battery(object):
         return str(self.capacity_original)
 
 class House(object):
-    def __init__(self, x, y, power):
+    def __init__(self, x, y, power, i):
+        self.id = i
         self.position = (x, y)
         self.power = power
 
@@ -145,13 +146,13 @@ def read_csv(f, house=False):
 
         # skip headers
         next(reader, None)
-        for row in reader:
+        for i, row in enumerate(reader):
 
             # create either a house or a battery
             if house:
-                entry = House(int(row[0]), int(row[1]), float(row[2]))
+                entry = House(int(row[0]), int(row[1]), float(row[2]), i)
             else:
-                entry = Battery(int(row[0]), int(row[1]), float(row[2]))
+                entry = Battery(int(row[0]), int(row[1]), float(row[2]), i)
             rv.append(entry)
         return rv
 

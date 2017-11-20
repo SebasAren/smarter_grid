@@ -4,6 +4,9 @@ import data_structure
 import numpy as np
 import random
 
+class ConstraintError(Exception):
+    pass
+
 def distance(pos1, pos2):
     return abs(pos1[0] - pos2[0]) + abs(pos1[1] - pos2[1])
 
@@ -31,12 +34,22 @@ class HillClimber(object):
             rv += el.power
         return rv
 
+    def contraint_check(self, bucket, b_type=0):
+        if size_of_bin(bucket) > self.bin_size[b_type]:
+            raise ConstraintError
+        else:
+            pass
+
+    # function to start the optimization
     def first_fit(self):
 
-        self.bin_size = self.batteries[0].capacity
+        # define a bin_size (TODO: make it work with different batteries)
+        self.bin_size = [self.batteries[0].capacity]
+
+        # make a list of bins
         self.bins = [[] for i in range(len(self.batteries))]
         for house in self.houses:
-            lowest = self.bin_size
+            lowest = self.bin_size[0]
             for i, el in enumerate(self.bins):
                 current = self.size_of_bin(el)
                 if current < lowest:
@@ -44,7 +57,6 @@ class HillClimber(object):
                     bin_place = i
             self.bins[bin_place].append(house)
 
-                    
 
 if __name__ == '__main__':
     CSV_HOUSES = 'data/wijk1_huizen.csv'
@@ -54,3 +66,4 @@ if __name__ == '__main__':
     batteries = data_structure.read_csv(CSV_BATTERIES)
 
     hill = HillClimber(houses, batteries)
+    hill.first_fit()
