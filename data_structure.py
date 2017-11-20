@@ -122,25 +122,38 @@ class House(object):
         self.position = (x, y)
         self.power = power
 
+    def __eq__(self, other):
+        if isinstance(other, House):
+            return self.power == other.power
+
+    def __lt__(self, other):
+        if isinstance(other, House):
+            return self.power < other.power
+
+    def __gt__(self, other):
+        if isinstance(other, House):
+            return self.power > other.power
+
     def __repr__(self):
         return str(self.power)
 
 # read data
 def read_csv(f, house=False):
-    reader = csv.reader(f)
-    rv = []
+    with open(f) as infile:
+        reader = csv.reader(infile)
+        rv = []
 
-    # skip headers
-    next(reader, None)
-    for row in reader:
+        # skip headers
+        next(reader, None)
+        for row in reader:
 
-        # create either a house or a battery
-        if house:
-            entry = House(int(row[0]), int(row[1]), float(row[2]))
-        else:
-            entry = Battery(int(row[0]), int(row[1]), float(row[2]))
-        rv.append(entry)
-    return rv
+            # create either a house or a battery
+            if house:
+                entry = House(int(row[0]), int(row[1]), float(row[2]))
+            else:
+                entry = Battery(int(row[0]), int(row[1]), float(row[2]))
+            rv.append(entry)
+        return rv
 
 if __name__ == "__main__":
     grid = Grid(4,4)
