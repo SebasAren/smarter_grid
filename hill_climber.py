@@ -3,6 +3,7 @@
 import data_structure
 import numpy as np
 import random
+import csv
 
 # custom error for contraint checking
 class ConstraintError(Exception):
@@ -17,19 +18,21 @@ class HillClimber(object):
  
     def __init__(self, houses, batteries):
 
-        self.cost_values = [0 for i in range(len(batteries))]
+        # init cost list for later price checking
+        self.cost_values = np.array([0 for i in range(len(batteries))])
         self.houses = houses
 
         # lambda works like a JS 'callback' it returns a value buried 
         # within the data structure
         self.houses.sort(key = lambda x: x.power, reverse=True)
+        self.houses = np.array(self.houses)
 
         # give houses id's
         for i, house in enumerate(self.houses):
             house.give_id(i)
 
         # give batteries id's
-        self.batteries = batteries
+        self.batteries = np.array(batteries)
         for j, battery in enumerate(self.batteries):
             battery.give_id(j)
 
@@ -56,6 +59,7 @@ class HillClimber(object):
         else:
             pass
 
+    # check the total minimum distance of a bin
     def distance_check(self, bucket, battery_id):
         cost_values = 0
         for i, house in enumerate(bucket):
@@ -118,8 +122,38 @@ class HillClimber(object):
         except ConstraintError:
             exit('First fit failed!')
 
+        self.bins = np.array(self.bins)
         for i, el in enumerate(self.bins):
             self.cost_values[i] = self.distance_check(el, i)
+
+def run_simulation(iterations, houses, batteries):
+    best_solution = []
+    best_value = 100000
+    try:
+        for i in range(iterations):
+            hill = HillClimber(houses, batteries)
+            hill.first_fit()
+            tries = 0
+            while tries < 10000:
+                if not hill.swap_houses():
+                    tries += 1
+                else:
+                    tries = 0
+            current = 0
+            for el in hill.cost_values:
+                current += el
+            if current < best_value:
+                print(current)
+                best_value = current
+                best_solution = hill.bins
+    finally:
+        with open('data/solution_wijk1.csv', 'w') as outfile:
+            writer = csv.writer(outfile)
+            writer.writerow(['position', 'power', 'battery'])
+            for i, el in enumerate(best_solution):
+                for row in el:
+                    writer.writerow([row.position, row.power, i])
+
 
 
 if __name__ == '__main__':
@@ -129,14 +163,15 @@ if __name__ == '__main__':
     houses = data_structure.read_csv(CSV_HOUSES, house=True)
     batteries = data_structure.read_csv(CSV_BATTERIES)
 
-    hill = HillClimber(houses, batteries)
-    hill.first_fit()
+    run_simulation(100, houses, batteries)
 
-    faults = 0
-    while faults < 10000:
-        if not hill.swap_houses():
-            faults += 1
-            hill.cost_values
-        else:
-            faults = 0
-            print(hill.cost_values)
+    # hill = HillClimber(houses, batteries)
+    # hill.first_fit()
+
+    # iterations = 0
+    # while iterations < 10000:
+    #     if not hill.swap_houses():
+    #         iterations += 1
+    #     else:
+    #         iterations = 0
+    #         print(hill.cost_values)
