@@ -146,19 +146,19 @@ def run_simulation(iterations, houses, batteries):
                 print(current)
                 best_value = current
                 best_solution = hill.bins
-    finally:
-        with open('data/solution_wijk1.csv', 'w') as outfile:
-            writer = csv.writer(outfile)
-            writer.writerow(['position', 'power', 'battery'])
-            for i, el in enumerate(best_solution):
-                for row in el:
-                    writer.writerow([row.position, row.power, i])
+                with open('data/solutions/wijk3/solution_{}.csv'.format(best_value), 'a') as outfile:
+                    writer = csv.writer(outfile)
+                    for i, el in enumerate(best_solution):
+                        for row in el:
+                            writer.writerow([row.position[0], row.position[1], row.power, i])
+    except KeyboardInterrupt:
+        exit('Keyboard pressed')
 
 
 
 if __name__ == '__main__':
-    CSV_HOUSES = 'data/wijk1_huizen.csv'
-    CSV_BATTERIES = 'data/wijk1_batterijen.csv'
+    CSV_HOUSES = 'data/wijk3_huizen.csv'
+    CSV_BATTERIES = 'data/wijk3_batterijen.csv'
 
     houses = data_structure.read_csv(CSV_HOUSES, house=True)
     batteries = data_structure.read_csv(CSV_BATTERIES)
