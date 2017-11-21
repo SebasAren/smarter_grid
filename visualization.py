@@ -12,7 +12,8 @@ def read_csv(f, house=False):
         rv = []
 
         # skip headers
-        next(reader, None)
+        if not house:
+	        next(reader, None)
         for row in reader:
 
             # create either a house or a battery
@@ -24,12 +25,13 @@ def read_csv(f, house=False):
             rv.append(entry)
         return rv
 
-CSV_FILE_BATTERIES = 'data/wijk1_batterijen.csv'
-CSV_FILE_HOUSES = 'data/solutions/wijk1/solution_2752.csv'
+CSV_FILE_BATTERIES = 'data/wijk2_batterijen.csv'
+CSV_FILE_HOUSES = 'data/solutions/wijk2/solution_884.csv'
 
 houses = read_csv(CSV_FILE_HOUSES, house=True)
 batteries = read_csv(CSV_FILE_BATTERIES)
-
+print(houses)
+print(len(houses))
 # variables to store coördinates
 x_houses= []
 y_houses=[]

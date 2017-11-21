@@ -140,7 +140,7 @@ class HillClimber(object):
 
 def run_simulation(iterations, houses, batteries):
     best_solution = []
-    best_value = 100000
+    best_value = 2752
     try:
         for i in range(iterations):
             hill = HillClimber(houses, batteries)
@@ -158,7 +158,7 @@ def run_simulation(iterations, houses, batteries):
                 print(current)
                 best_value = current
                 best_solution = hill.bins
-                with open('data/solutions/wijk3/solution_{}.csv'.format(best_value), 'a') as outfile:
+                with open('data/solutions/wijk1/solution_{}.csv'.format(best_value), 'a') as outfile:
                     writer = csv.writer(outfile)
                     for i, el in enumerate(best_solution):
                         for row in el:
