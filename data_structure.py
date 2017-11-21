@@ -159,6 +159,12 @@ class House(object):
     def __repr__(self):
         return str(self.power)
 
+    def __add__(self, other):
+        if isinstance(other, House):
+            return self.power + other.power
+        else:
+            return self.power + other
+
 # read data
 def read_csv(f, house=False):
     with open(f) as infile:

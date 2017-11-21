@@ -30,8 +30,7 @@ CSV_FILE_HOUSES = 'data/solutions/wijk2/solution_884.csv'
 
 houses = read_csv(CSV_FILE_HOUSES, house=True)
 batteries = read_csv(CSV_FILE_BATTERIES)
-print(houses)
-print(len(houses))
+
 # variables to store coördinates
 x_houses= []
 y_houses=[]
@@ -63,15 +62,13 @@ for i in range(len(x_batteries)):
 plt.grid(b = True, axis = 'both')
 
 # scale the x and y axis
-# dit moet ook nog afhankelijk worden van welke grid je kiest
 plt.xticks(np.arange(0, 51, 1))
 plt.yticks(np.arange(0, 51, 1))
 
-# # lables for x and y axis and title
+# lables for x and y axis and title
 plt.ylabel('y')
 plt.xlabel('x')
-# # TITEL MOET AFHANKELIJK ZIJN VAN DE WIJK, DUS MOET NOG AANGEPAST WORDEN
-# # waarschijnlijk iets van plt.title(sys.argv[1]) ofzoiets
+
 plt.title('Wijk 1')
 plt.legend()
 plt.show()
