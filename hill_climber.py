@@ -59,6 +59,18 @@ class HillClimber(object):
         else:
             pass
 
+    def mean_distance_check(self, bucket, battery_id):
+        cost_values = 0
+        for i, house in enumerate(bucket):
+            total_house = self.distance_batteries[battery_id][house.id]
+            for count, j in enumerate(range(i + 1, len(bucket))):
+                total_house += self.distance_houses[house.id][bucket[j].id]
+            cost_values += total_house / (count + 1)
+        return cost_values
+
+
+
+
     # check the total minimum distance of a bin
     def distance_check(self, bucket, battery_id):
         cost_values = 0
@@ -90,8 +102,8 @@ class HillClimber(object):
             self.bins[bin_1][house_1], self.bins[bin_2][house_2] = self.bins[bin_2][house_2], self.bins[bin_1][house_1]
             return False
 
-        check_1 = self.distance_check(self.bins[bin_1], bin_1)
-        check_2 = self.distance_check(self.bins[bin_2], bin_2)
+        check_1 = self.mean_distance_check(self.bins[bin_1], bin_1)
+        check_2 = self.mean_distance_check(self.bins[bin_2], bin_2)
         if (check_1 + check_2) < (self.cost_values[bin_1] + self.cost_values[bin_2]):
             self.cost_values[bin_1] = check_1
             self.cost_values[bin_2] = check_2
@@ -124,7 +136,7 @@ class HillClimber(object):
 
         self.bins = np.array(self.bins)
         for i, el in enumerate(self.bins):
-            self.cost_values[i] = self.distance_check(el, i)
+            self.cost_values[i] = self.mean_distance_check(el, i)
 
 def run_simulation(iterations, houses, batteries):
     best_solution = []
@@ -163,7 +175,16 @@ if __name__ == '__main__':
     houses = data_structure.read_csv(CSV_HOUSES, house=True)
     batteries = data_structure.read_csv(CSV_BATTERIES)
 
-    run_simulation(100, houses, batteries)
+    # hill = HillClimber(houses, batteries)
+    # hill.first_fit()
+    # tries = 0
+    # while tries < 10000:
+    #     if not hill.swap_houses():
+    #         tries += 1
+    #     else:
+    #         print(hill.cost_values)
+
+    run_simulation(2, houses, batteries)
 
     # hill = HillClimber(houses, batteries)
     # hill.first_fit()
