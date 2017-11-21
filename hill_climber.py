@@ -169,6 +169,7 @@ def run_simulation(iterations, houses, batteries):
 
 
 if __name__ == '__main__':
+
     CSV_HOUSES = 'data/wijk1_huizen.csv'
     CSV_BATTERIES = 'data/wijk1_batterijen.csv'
 
@@ -185,6 +186,7 @@ if __name__ == '__main__':
     #         print(hill.cost_values)
 
     run_simulation(25, houses, batteries)
+
 
     # hill = HillClimber(houses, batteries)
     # hill.first_fit()

@@ -3,6 +3,7 @@
 from data_structure import Battery, House, read_csv
 from itertools import combinations, chain
 import data_generator
+import hill_climber
 
 WIDTH = 1
 HEIGHT = 2

@@ -23,35 +23,50 @@ class Grid(object):
             try:
                 neighbour_cable = Cable()
                 self.grid[x][y+1].place_cable(neighbour_cable)
-                self.grid[x][y+1].cable[-1].directions[(direction + 2) % 4] = True
+                self.grid[x][y+1].cable[-1].directions[2] = True
             except IndexError:
+                self.grid[x][y].cable.pop(-1)
                 pass
 
         elif direction == 1:
             try:
                 neighbour_cable = Cable()
                 self.grid[x+1][y].place_cable(neighbour_cable)
-                self.grid[x+1][y].cable[-1].directions[(direction + 2) % 4] = True
+                self.grid[x+1][y].cable[-1].directions[3] = True
             except IndexError:
+                self.grid[x][y].cable[-1].pop()
                 pass   
 
         elif direction == 2:
             try:
                 neighbour_cable = Cable()
                 self.grid[x][y-1].place_cable(neighbour_cable)
-                self.grid[x][y-1].cable[-1].directions[(direction + 2) % 4] = True
+                self.grid[x][y-1].cable[-1].directions[0] = True
             except IndexError:
+                self.grid[x][y].cable[-1].pop()
                 pass
 
         elif direction == 3:
             try:
                 neighbour_cable = Cable()
                 self.grid[x-1][y].place_cable(neighbour_cable)
-                self.grid[x-1][y].cable[-1].directions[(direction + 2) % 4] = True
+                self.grid[x-1][y].cable[-1].directions[1] = True
             except IndexError:
+                self.grid[x][y].cable[-1].pop()
                 pass
-        
 
+    def calc_score(self):
+    # intial score (not tested)
+        score = 0
+
+        for i in range(len(self.grid[0])):
+            for j in range(len(self.grid)):
+                if self.grid[i][j].battery != None:
+                    score += 5000
+                if self.grid[i][j].cable:
+                    score += (9 * len(self.grid[i][j].cable)) / 2
+
+        return score
 
 class Node(object):
 
@@ -163,5 +178,11 @@ def read_csv(f, house=False):
             rv.append(entry)
         return rv
 
-if __name__ == "__main__":
-    grid = Grid(4,4)
+
+# small grid for testing purposes only
+# if __name__ == "__main__":
+#     grid = Grid(4,4)
+#     batt = Battery(2,2,150)
+#     grid.grid[2][2].place_battery(batt)
+#     house = House(3,3,50)
+#     grid.grid[3][3].place_house(house)
