@@ -123,9 +123,11 @@ class House(object):
     def __init__(self, x, y, power):
         self.position = (x, y)
         self.power = power
+        self.bat_id = 0
 
     def give_id(self, i):
         self.id = i
+
 
     def __eq__(self, other):
         if isinstance(other, House):
@@ -155,6 +157,7 @@ def read_csv(f, house=False):
             # create either a house or a battery
             if house:
                 entry = House(int(row[0]), int(row[1]), float(row[2]))
+                #entry.bat_id = int(row[3])
             else:
                 entry = Battery(int(row[0]), int(row[1]), float(row[2]))
             rv.append(entry)

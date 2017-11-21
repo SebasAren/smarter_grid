@@ -1,11 +1,31 @@
-from data_structure import Battery, House, read_csv
+from data_structure import Battery, House
 import data_generator 
 import numpy as np
 import sys 
 import matplotlib.pyplot as plt
+import csv
+
+# read data
+def read_csv(f, house=False):
+    with open(f) as infile:
+        reader = csv.reader(infile)
+        rv = []
+
+        # skip headers
+        next(reader, None)
+        for row in reader:
+
+            # create either a house or a battery
+            if house:
+                entry = House(int(row[0]), int(row[1]), float(row[2]))
+                entry.bat_id = int(row[3])
+            else:
+                entry = Battery(int(row[0]), int(row[1]), float(row[2]))
+            rv.append(entry)
+        return rv
 
 CSV_FILE_BATTERIES = 'data/wijk1_batterijen.csv'
-CSV_FILE_HOUSES = 'data/wijk1_huizen.csv'
+CSV_FILE_HOUSES = 'data/solutions/wijk1/solution_2752.csv'
 
 houses = read_csv(CSV_FILE_HOUSES, house=True)
 batteries = read_csv(CSV_FILE_BATTERIES)
@@ -26,14 +46,15 @@ for batterie in batteries:
 
 # lists for colours and numbers of the different batteries
 colours = ["red", "green", "blue", "black", "purple"]
-battery_number= ["batterie 0", "batterie 1", "batterie 2", "batterie 3", "batterie 4"]
+battery_number= ["battery 0", "battery 1", "battery 2", "battery 3", "battery 4"]
 
 # plot the houses 
-plt.scatter(x_houses, y_houses, color= 'k', marker = '^', s = 50, label = 'houses')
+for i in range(len(x_houses)):
+	plt.scatter(x_houses[i], y_houses[i], color= colours[houses[i].bat_id], marker = '^', s = 50)
 
 # plot the batteries
 for i in range(len(x_batteries)):
-	plt.scatter(x_batteries[i], y_batteries[i], color= colours[i], marker = 'x', s = 50, label = battery_number[i])
+	plt.scatter(x_batteries[i], y_batteries[i], color= colours[i], marker = 'x', s = 50) #label = battery_number[i])
 	
 
 # add grid to graph
@@ -49,7 +70,7 @@ plt.ylabel('y')
 plt.xlabel('x')
 # # TITEL MOET AFHANKELIJK ZIJN VAN DE WIJK, DUS MOET NOG AANGEPAST WORDEN
 # # waarschijnlijk iets van plt.title(sys.argv[1]) ofzoiets
-plt.title('test_wijk1')
+plt.title('Wijk 1')
 plt.legend()
 plt.show()
 
