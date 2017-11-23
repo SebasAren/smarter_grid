@@ -78,13 +78,17 @@ def brute_force_solution(houses, batteries):
 if __name__ == '__main__':
     import sys
 
-    # create a list of houses
-    with open('data/test_wijk/{}_huizen.csv'.format(sys.argv[1])) as f:
-        houses = read_csv(f, house=True)
+    # create a list of houses and batteries
+    houses = read_csv('data/{}_huizen.csv'.format(sys.argv[1]), house=True)
+    batteries = read_csv('data/{}_batterijen.csv'.format(sys.argv[1]))
 
-    # and batteries
-    with open('data/test_wijk/{}_batterijen.csv'.format(sys.argv[1])) as f:
-        batteries = read_csv(f)
-
-    print(brute_force_solution(houses, batteries))
-    print(batteries)
+    if sys.argv[2] == 'hillclimber':
+        hill = hill_climber.HillClimber(houses, batteries)
+        hill.first_fit()
+        tries = 0
+        while tries < 10000:
+            if not hill.swap_houses():
+                tries += 1
+            else:
+                tries = 0
+                print(hill.cost_values)

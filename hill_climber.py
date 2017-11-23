@@ -176,16 +176,18 @@ if __name__ == '__main__':
     houses = data_structure.read_csv(CSV_HOUSES, house=True)
     batteries = data_structure.read_csv(CSV_BATTERIES)
 
-    # hill = HillClimber(houses, batteries)
-    # hill.first_fit()
-    # tries = 0
-    # while tries < 10000:
-    #     if not hill.swap_houses():
-    #         tries += 1
-    #     else:
-    #         print(hill.cost_values)
+    hill = HillClimber(houses, batteries)
+    hill.first_fit()
+    tries = 0
+    while tries < 10000:
+        if not hill.swap_houses():
+            tries += 1
+        else:
+            print(tries)
+            tries = 0
+            print(hill.cost_values)
 
-    run_simulation(25, houses, batteries)
+    # run_simulation(25, houses, batteries)
 
 
     # hill = HillClimber(houses, batteries)

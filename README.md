@@ -2,6 +2,9 @@
 
 Authors: Casper van Velzen, Jelle den Haan, Sebastiaan Arendsen
 
+## Description
+placeholder: http://heuristieken.nl/wiki/index.php?title=SmartGrid
+
 ## Installation
 
 ### Requirements
@@ -9,4 +12,12 @@ Authors: Casper van Velzen, Jelle den Haan, Sebastiaan Arendsen
 * pip 9.0.1
 
 ### Python packages
-run: pip3 install -r requirements.txt
+run: pip install -r requirements.txt
+
+## Usage
+
+### Hill Climber
+run: python main.py wijk1/wijk2/wijk3 hillclimber
+or run: python -i main.py wijk1/wijk2/wijk3 hillclimber
+
+Bins will be stored as hill.bins containing lists of houses connected to certain batteries.
