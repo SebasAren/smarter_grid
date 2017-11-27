@@ -138,33 +138,33 @@ class HillClimber(object):
         for i, el in enumerate(self.bins):
             self.cost_values[i] = self.mean_distance_check(el, i)
 
-def run_simulation(iterations, houses, batteries):
-    best_solution = []
-    best_value = 2752
-    try:
+    # run the simulation iterations times and save best values
+    def run_simulation(self, iterations=25, best_value=10000):
+        best_solution = []
         for i in range(iterations):
-            hill = HillClimber(houses, batteries)
-            hill.first_fit()
+            self.first_fit()
             tries = 0
             while tries < 10000:
-                if not hill.swap_houses():
+                if not self.swap_houses():
                     tries += 1
                 else:
                     tries = 0
             current = 0
-            for el in hill.cost_values:
+            for el in self.cost_values:
                 current += el
             if current < best_value:
-                print(current)
                 best_value = current
-                best_solution = hill.bins
-                with open('data/solutions/wijk1/solution_{}.csv'.format(best_value), 'a') as outfile:
-                    writer = csv.writer(outfile)
-                    for i, el in enumerate(best_solution):
-                        for row in el:
-                            writer.writerow([row.position[0], row.position[1], row.power, i])
-    except KeyboardInterrupt:
-        exit('Keyboard pressed')
+                best_solution = self.bins
+                self.write_solution(best_solution, best_value)
+            print('Iteration count: {} of {}.'.format(i + 1, iterations))
+
+    # save the solution to a csv
+    def write_solution(self, best_solution, best_value):
+        with open('data/solutions/wijk1/solution_{}.csv'.format(best_value), 'a') as outfile:
+            writer = csv.writer(outfile)
+            for i, el in enumerate(best_solution):
+                for row in el:
+                    writer.writerow([row.position[0], row.position[1], row.power, i])
 
 
 
@@ -177,26 +177,3 @@ if __name__ == '__main__':
     batteries = data_structure.read_csv(CSV_BATTERIES)
 
     hill = HillClimber(houses, batteries)
-    hill.first_fit()
-    tries = 0
-    while tries < 10000:
-        if not hill.swap_houses():
-            tries += 1
-        else:
-            print(tries)
-            tries = 0
-            print(hill.cost_values)
-
-    # run_simulation(25, houses, batteries)
-
-
-    # hill = HillClimber(houses, batteries)
-    # hill.first_fit()
-
-    # iterations = 0
-    # while iterations < 10000:
-    #     if not hill.swap_houses():
-    #         iterations += 1
-    #     else:
-    #         iterations = 0
-    #         print(hill.cost_values)
