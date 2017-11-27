@@ -71,10 +71,11 @@ class Grid(object):
 class Node(object):
 
 # this is the object that is found on every grid point
-    def __init__(self):
+    def __init__(self, id):
         self.cable = []
         self.house = None
         self.battery = None 
+        self.id = id
 
     def place_house(self, house):
         self.house = house
@@ -84,6 +85,33 @@ class Node(object):
 
     def place_cable(self, cable):
         self.cable.append(cable)
+
+    def __hash__(self):
+        return hash(self.id)
+
+    def __cmp__(self):
+        if isinstance(other, Node):
+
+            if self.id < other.id:
+                return -1
+            elif self.id == other.id:
+                return 0
+            else:
+                return 1
+                
+        else:
+            raise TypeError
+
+    def __eq__(self):
+        if isinstance(other, Node):
+            if self.id == other.id:
+                return True
+
+            else:
+                return False
+
+        else:
+            return False
 
 
 class Cable(object):
