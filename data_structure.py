@@ -2,6 +2,7 @@
 
 import csv
 import numpy as np
+import networkx as nx
 
 class Grid(object):
 
@@ -87,7 +88,7 @@ class Node(object):
         self.cable.append(cable)
 
     def __hash__(self):
-        return hash(self.id)
+        return hash(str(self.id))
 
     def __cmp__(self):
         if isinstance(other, Node):
@@ -98,7 +99,7 @@ class Node(object):
                 return 0
             else:
                 return 1
-                
+
         else:
             raise TypeError
 
