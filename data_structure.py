@@ -4,6 +4,15 @@ import csv
 import numpy as np
 import networkx as nx
 
+class Graph(object):
+    def __init__(self, size):
+        self.graph = nx.grid_2d_graph(size, size)
+        self.size = size
+
+    def __repr__(self):
+        return str(self.size)
+
+
 class Grid(object):
 
     # initialize the grid with a numpy 2d-array which consists of nodes 
@@ -215,9 +224,5 @@ def read_csv(f, house=False):
 
 
 # small grid for testing purposes only
-# if __name__ == "__main__":
-#     grid = Grid(4,4)
-#     batt = Battery(2,2,150)
-#     grid.grid[2][2].place_battery(batt)
-#     house = House(3,3,50)
-#     grid.grid[3][3].place_house(house)
+if __name__ == "__main__":
+    gr = Graph(4)
