@@ -9,6 +9,9 @@ class Graph(object):
         self.graph = nx.grid_2d_graph(size, size)
         self.size = size
 
+    def add_nodes(self, x, y, in_node):
+        self.graph.node[x,y]['node'] = in_node
+
     def __repr__(self):
         return str(self.size)
 
@@ -82,7 +85,6 @@ class Node(object):
 
 # this is the object that is found on every grid point
     def __init__(self, id):
-        self.cable = []
         self.house = None
         self.battery = None 
         self.id = id
@@ -92,9 +94,6 @@ class Node(object):
 
     def place_battery(self, battery):
         self.battery = battery
-
-    def place_cable(self, cable):
-        self.cable.append(cable)
 
     def __hash__(self):
         return hash(str(self.id))
@@ -122,6 +121,9 @@ class Node(object):
 
         else:
             return False
+
+    def __repr__(self):
+        return str(self.id)
 
 
 class Cable(object):
@@ -225,4 +227,17 @@ def read_csv(f, house=False):
 
 # small grid for testing purposes only
 if __name__ == "__main__":
-    gr = Graph(4)
+    gridsize =  50
+
+    gr = Graph(gridsize)
+
+    nodelist = []
+    for i in range(gridsize * gridsize):
+        nodelist.append(Node(i))
+
+    count = 0
+    for x in range(gridsize):
+        for y in range(gridsize):
+            gr.add_nodes(x, y, nodelist[count])
+            count += 1
+            # print(gr.graph.node[x,y]['node'])
