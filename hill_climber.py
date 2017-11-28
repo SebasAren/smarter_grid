@@ -44,6 +44,17 @@ class HillClimber(object):
         self.distance_batteries = np.array([[distance(i.position, j.position)\
             for i in self.houses] for j in self.batteries])
 
+        # define a bin_size (TODO: make it work with different batteries)
+        self.bin_size = [self.batteries[0].capacity]
+
+        self.bins = self.first_fit()
+
+        print(self.bins)
+
+        for i, el in enumerate(self.bins):
+            self.cost_values[i] = self.mean_distance_check(el, i)
+
+
 
     # check total value inside bin
     def size_of_bin(self, bucket):
@@ -55,23 +66,21 @@ class HillClimber(object):
     # check contstraint
     def constraint_check(self, bucket, b_type=0):
         if self.size_of_bin(bucket) > self.bin_size[b_type]:
-            raise ConstraintError
+            return False
         else:
-            pass
+            return True
 
     def mean_distance_check(self, bucket, battery_id):
-        cost_values = 0
+        cost = 0
         for i, house in enumerate(bucket):
             total_house = self.distance_batteries[battery_id][house.id]
             for count, j in enumerate(range(i + 1, len(bucket))):
                 total_house += self.distance_houses[house.id][bucket[j].id]
-            cost_values += total_house / (count + 1)
-        return cost_values
+            cost += total_house / (count + 1)
+        
+        return cost
 
-
-
-
-    # check the total minimum distance of a bin
+    # check the total minimum distance of a bin, NIET GEBRUIKT
     def distance_check(self, bucket, battery_id):
         cost_values = 0
         for i, house in enumerate(bucket):
@@ -82,7 +91,22 @@ class HillClimber(object):
             cost_values += smallest
         return cost_values
 
-    def swap_houses(self):
+    
+    def improvement_check(self, bin_1, bin_2):    
+         
+        # check if distance decreases
+        check_1 = self.mean_distance_check(self.bins[bin_1], bin_1)
+        check_2 = self.mean_distance_check(self.bins[bin_2], bin_2)
+        
+        if (check_1 + check_2) < (self.cost_values[bin_1] + self.cost_values[bin_2]):
+            self.cost_values[bin_1] = check_1
+            self.cost_values[bin_2] = check_2
+            return True
+        else:
+            return False
+
+    def pick_swap(self):
+        # pick random houses to swap 
         bin_1 = random.randrange(len(self.bins))
         bin_2 = bin_1
         while bin_2 == bin_1:
@@ -94,58 +118,58 @@ class HillClimber(object):
         # swap houses
         self.bins[bin_1][house_1], self.bins[bin_2][house_2] = self.bins[bin_2][house_2], self.bins[bin_1][house_1]
 
+        # dit stuk bij constraints check 
         # check constraints, else swap them back and break function
-        try:
-            self.constraint_check(self.bins[bin_1])
-            self.constraint_check(self.bins[bin_2])
-        except ConstraintError:
-            self.bins[bin_1][house_1], self.bins[bin_2][house_2] = self.bins[bin_2][house_2], self.bins[bin_1][house_1]
-            return False
+        if self.constraint_check(self.bins[bin_1]) == True and self.constraint_check(self.bins[bin_2]) == True:
+            # checks for improvement
+            if self.improvement_check(bin_1, bin_2):
+                return True 
+        
+            else: 
+                self.bins[bin_1][house_1], self.bins[bin_2][house_2] = self.bins[bin_2][house_2], self.bins[bin_1][house_1]  
+                return False
+        else: 
+            self.bins[bin_1][house_1], self.bins[bin_2][house_2] = self.bins[bin_2][house_2], self.bins[bin_1][house_1]  
+            return False          
 
-        check_1 = self.mean_distance_check(self.bins[bin_1], bin_1)
-        check_2 = self.mean_distance_check(self.bins[bin_2], bin_2)
-        if (check_1 + check_2) < (self.cost_values[bin_1] + self.cost_values[bin_2]):
-            self.cost_values[bin_1] = check_1
-            self.cost_values[bin_2] = check_2
-            return True
-        else:
-            self.bins[bin_1][house_1], self.bins[bin_2][house_2] = self.bins[bin_2][house_2], self.bins[bin_1][house_1]
-            return False
+        # old code
+        #except ConstraintError:
+          #  self.bins[bin_1][house_1], self.bins[bin_2][house_2] = self.bins[bin_2][house_2], self.bins[bin_1][house_1]
+         #   return False
 
+           
 
     # function to start the optimization
     def first_fit(self):
 
-        # define a bin_size (TODO: make it work with different batteries)
-        self.bin_size = [self.batteries[0].capacity]
-
         # make a list of bins
-        self.bins = [[] for i in range(len(self.batteries))]
+        bins = [[] for i in range(len(self.batteries))]
         try:
             for house in self.houses:
                 lowest = self.bin_size[0]
-                for i, el in enumerate(self.bins):
+                for i, el in enumerate(bins):
                     current = self.size_of_bin(el)
                     if current < lowest:
                         lowest = current
                         bin_place = i
-                self.bins[bin_place].append(house)
-                self.constraint_check(self.bins[bin_place])
+                bins[bin_place].append(house)
+                self.constraint_check(bins[bin_place])
         except ConstraintError:
             exit('First fit failed!')
 
-        self.bins = np.array(self.bins)
-        for i, el in enumerate(self.bins):
-            self.cost_values[i] = self.mean_distance_check(el, i)
+        bins = np.array(bins)
 
-    # run the simulation iterations times and save best values
+        return bins
+      
+
+    # run the simulation iterations times and save best values , DOES NOT WORK 
     def run_simulation(self, iterations=25, best_value=10000):
         best_solution = []
         for i in range(iterations):
-            self.first_fit()
+            self.bins = self.first_fit()
             tries = 0
             while tries < 10000:
-                if not self.swap_houses():
+                if not self.pick_swap():
                     tries += 1
                 else:
                     tries = 0
@@ -157,6 +181,26 @@ class HillClimber(object):
                 best_solution = self.bins
                 self.write_solution(best_solution, best_value)
             print('Iteration count: {} of {}.'.format(i + 1, iterations))
+
+    
+
+    def climbing(self):
+        """
+        Runs the hill climber only once. Adds the current cost of distribution of the houses
+        and returns the cost. 
+        
+        """    
+        tries = 0 
+        while tries < 10000:
+            print(tries)
+            if not self.pick_swap():
+                tries += 1
+            else:
+                tries = 0 
+        current = 0
+        for el in self.cost_values:
+            current += el    
+        return current               
 
     # save the solution to a csv
     def write_solution(self, best_solution, best_value):
@@ -177,3 +221,4 @@ if __name__ == '__main__':
     batteries = data_structure.read_csv(CSV_BATTERIES)
 
     hill = HillClimber(houses, batteries)
+    print(hill.climbing())
