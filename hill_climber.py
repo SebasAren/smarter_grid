@@ -4,6 +4,7 @@ import data_structure
 import numpy as np
 import random
 import csv
+import copy
 
 # custom error for contraint checking
 class ConstraintError(Exception):
@@ -47,9 +48,7 @@ class HillClimber(object):
         # define a bin_size (TODO: make it work with different batteries)
         self.bin_size = [self.batteries[0].capacity]
 
-        self.bins = self.first_fit()
-
-        print(self.bins)
+        self.bins = self.random_fit()
 
         for i, el in enumerate(self.bins):
             self.cost_values[i] = self.mean_distance_check(el, i)
@@ -132,13 +131,6 @@ class HillClimber(object):
             self.bins[bin_1][house_1], self.bins[bin_2][house_2] = self.bins[bin_2][house_2], self.bins[bin_1][house_1]  
             return False          
 
-        # old code
-        #except ConstraintError:
-          #  self.bins[bin_1][house_1], self.bins[bin_2][house_2] = self.bins[bin_2][house_2], self.bins[bin_1][house_1]
-         #   return False
-
-           
-
     # function to start the optimization
     def first_fit(self):
 
@@ -160,13 +152,38 @@ class HillClimber(object):
         bins = np.array(bins)
 
         return bins
+
+    def random_fit(self): 
+        temp_houses = copy.copy(self.houses)
+        
+        bins = [[] for i in range(len(self.batteries))] 
+
+
+        
+
+        for i in self.houses:
+            house_1 = random.randrange(len(temp_houses))
+            lowest = self.bin_size[0]
+            for i, el in enumerate(bins):
+                current = self.size_of_bin(el)
+                if current < lowest:
+                    lowest = current
+                    bin_place = i
+            bins[bin_place].append(temp_houses[house_1])
+            np.delete(temp_houses, house_1)
+            self.constraint_check(bins[bin_place])
+        
+
+        bins = np.array(bins)
+
+        return bins
       
 
     # run the simulation iterations times and save best values , DOES NOT WORK 
     def run_simulation(self, iterations=25, best_value=10000):
         best_solution = []
         for i in range(iterations):
-            self.bins = self.first_fit()
+            self.bins = self.random_fit()
             tries = 0
             while tries < 10000:
                 if not self.pick_swap():
@@ -192,7 +209,6 @@ class HillClimber(object):
         """    
         tries = 0 
         while tries < 10000:
-            print(tries)
             if not self.pick_swap():
                 tries += 1
             else:
@@ -220,5 +236,11 @@ if __name__ == '__main__':
     houses = data_structure.read_csv(CSV_HOUSES, house=True)
     batteries = data_structure.read_csv(CSV_BATTERIES)
 
-    hill = HillClimber(houses, batteries)
-    print(hill.climbing())
+    solutions = []
+    for i in range(15):
+        hill = HillClimber(houses, batteries)
+        solutions.append(hill.climbing())
+
+    print(solutions)    
+
+    
