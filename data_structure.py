@@ -3,11 +3,25 @@
 import csv
 import numpy as np
 import networkx as nx
+import matplotlib as plt
+import sys
 
 class Graph(object):
     def __init__(self, size):
         self.graph = nx.grid_2d_graph(size, size)
         self.size = size
+
+    def draw_graph(self):
+
+        nx.write_adjlist(self.graph, sys.stdout.buffer)
+        nx. write_edgelist(self.graph, path="grid.edgelist", delimiter=":")
+        # read edgelist from grid.edgelist
+        H = nx.read_edgelist(path="grid.edgelist", delimiter=":")
+        nx.draw(H)
+        plt.show()
+
+    def make_nodes(self):
+        pass
 
     def __repr__(self):
         return str(self.size)
@@ -81,20 +95,10 @@ class Grid(object):
 class Node(object):
 
 # this is the object that is found on every grid point
-    def __init__(self, id):
-        self.cable = []
-        self.house = None
-        self.battery = None 
-        self.id = id
-
-    def place_house(self, house):
+    def __init__(self, id, battery=None, house=None):
         self.house = house
-
-    def place_battery(self, battery):
         self.battery = battery
-
-    def place_cable(self, cable):
-        self.cable.append(cable)
+        self.id = id
 
     def __hash__(self):
         return hash(str(self.id))
