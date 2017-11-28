@@ -2,6 +2,16 @@
 
 import csv
 import numpy as np
+import networkx as nx
+
+class Graph(object):
+    def __init__(self, size):
+        self.graph = nx.grid_2d_graph(size, size)
+        self.size = size
+
+    def __repr__(self):
+        return str(self.size)
+
 
 class Grid(object):
 
@@ -71,10 +81,11 @@ class Grid(object):
 class Node(object):
 
 # this is the object that is found on every grid point
-    def __init__(self):
+    def __init__(self, id):
         self.cable = []
         self.house = None
         self.battery = None 
+        self.id = id
 
     def place_house(self, house):
         self.house = house
@@ -84,6 +95,33 @@ class Node(object):
 
     def place_cable(self, cable):
         self.cable.append(cable)
+
+    def __hash__(self):
+        return hash(str(self.id))
+
+    def __cmp__(self):
+        if isinstance(other, Node):
+
+            if self.id < other.id:
+                return -1
+            elif self.id == other.id:
+                return 0
+            else:
+                return 1
+
+        else:
+            raise TypeError
+
+    def __eq__(self):
+        if isinstance(other, Node):
+            if self.id == other.id:
+                return True
+
+            else:
+                return False
+
+        else:
+            return False
 
 
 class Cable(object):
@@ -186,9 +224,5 @@ def read_csv(f, house=False):
 
 
 # small grid for testing purposes only
-# if __name__ == "__main__":
-#     grid = Grid(4,4)
-#     batt = Battery(2,2,150)
-#     grid.grid[2][2].place_battery(batt)
-#     house = House(3,3,50)
-#     grid.grid[3][3].place_house(house)
+if __name__ == "__main__":
+    gr = Graph(4)
