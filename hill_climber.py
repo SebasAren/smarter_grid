@@ -5,6 +5,7 @@ import numpy as np
 import random
 import csv
 import copy
+import itertools
 
 # custom error for contraint checking
 class ConstraintError(Exception):
@@ -157,10 +158,7 @@ class HillClimber(object):
         temp_houses = copy.copy(self.houses)
         
         bins = [[] for i in range(len(self.batteries))] 
-
-
         
-
         for i in self.houses:
             house_1 = random.randrange(len(temp_houses))
             lowest = self.bin_size[0]
@@ -218,6 +216,25 @@ class HillClimber(object):
             current += el    
         return current               
 
+    def test_bins(self):
+        best_swap = copy.copy(self.cost_values)
+        best_permutation = (0, 1, 2, 3, 4)
+        for el in itertools.permutations(range(5), len(range(5))):
+            current = []
+            for i, bin in enumerate(self.bins):
+                current.append(self.mean_distance_check(bin, el[i]))
+                # kijken welke waarde je krijgt en dan de beste steeds opslaan, die waarde returnen en oproepen in climbing function
+            if sum(current) < sum(best_swap):
+                best_swap = current
+                best_permutation = el
+
+        return best_permutation
+
+
+
+
+
+
     # save the solution to a csv
     def write_solution(self, best_solution, best_value):
         with open('data/solutions/wijk1/solution_{}.csv'.format(best_value), 'a') as outfile:
@@ -225,7 +242,6 @@ class HillClimber(object):
             for i, el in enumerate(best_solution):
                 for row in el:
                     writer.writerow([row.position[0], row.position[1], row.power, i])
-
 
 
 if __name__ == '__main__':
