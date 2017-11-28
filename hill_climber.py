@@ -239,7 +239,9 @@ if __name__ == '__main__':
     solutions = []
     for i in range(15):
         hill = HillClimber(houses, batteries)
-        solutions.append(hill.climbing())
+        val = hill.climbing()
+        hill.write_solution(hill.bins, val)
+        solutions.append(val)
 
     print(solutions)    
 

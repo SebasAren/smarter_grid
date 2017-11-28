@@ -26,7 +26,7 @@ def read_csv(f, house=False):
         return rv
 
 CSV_FILE_BATTERIES = 'data/wijk1_batterijen.csv'
-CSV_FILE_HOUSES = 'data/solutions/wijk1/solution_3174.csv'
+CSV_FILE_HOUSES = 'data/solutions/wijk1/solution_5669.csv'
 
 houses = read_csv(CSV_FILE_HOUSES, house=True)
 batteries = read_csv(CSV_FILE_BATTERIES)
@@ -69,7 +69,7 @@ plt.yticks(np.arange(0, 51, 1))
 plt.ylabel('y')
 plt.xlabel('x')
 
-plt.title('Wijk 1 (3174)')
+plt.title('Wijk 1 (5669)')
 plt.legend()
 plt.show()
 
