@@ -138,10 +138,17 @@ class Cable(object):
 
 class Network(object):
     def __init__(self, x, y):
-        self.position = [x, y]
+        self.x = x
+        self.y = y
 
     def __repr__(self):
         return str(self.position)
+
+    def distance(self, other):
+        if isinstance(other, Network):
+            return abs(self.x - other.x) + abs(self.y - other.y)
+        else:
+            raise TypeError
 
 
 class Battery(object):

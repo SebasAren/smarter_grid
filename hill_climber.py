@@ -215,7 +215,6 @@ class HillClimber(object):
                 if len([i for i, j in zip(permutation, [0, 1, 2, 3, 4]) if i == j]) == 5:
                     tries += 1
                 else:
-                    swapped = []
                     new_bins = [[] for i in range(5)]
                     for i, el in enumerate(permutation):
                         new_bins[i] = self.bins[el]
