@@ -136,6 +136,13 @@ class Cable(object):
         def connect_battery(self, battery):
             self.battery = battery
 
+class Network(object):
+    def __init__(self, x, y):
+        self.position = [x, y]
+
+    def __repr__(self):
+        return str(self.position)
+
 
 class Battery(object):
     
@@ -226,6 +233,7 @@ def read_csv(f, house=False):
 
 # small grid for testing purposes only
 if __name__ == "__main__":
+    # make grid
     gridsize =  50
 
     gr = Graph(gridsize)
@@ -239,4 +247,3 @@ if __name__ == "__main__":
         for y in range(gridsize):
             gr.add_nodes(x, y, nodelist[count])
             count += 1
-            # print(gr.graph.node[x,y]['node'])
