@@ -8,7 +8,7 @@ import copy
 import itertools
 
 # custom error for contraint checking
-class ConstraintError(Exception):
+class FitError(Exception):
     pass
 
 # manhattan distance between 2 tuples/lists
@@ -48,8 +48,12 @@ class HillClimber(object):
 
         # define a bin_size (TODO: make it work with different batteries)
         self.bin_size = [self.batteries[0].capacity]
-
-        self.bins = self.random_fit()
+        while True:
+            try:
+                self.bins = self.random_fit()
+                break
+            except FitError:
+                pass
 
         for i, el in enumerate(self.bins):
             self.cost_values[i] = self.mean_distance_check(el, i)
@@ -115,22 +119,27 @@ class HillClimber(object):
         house_1 = random.randrange(len(self.bins[bin_1]))
         house_2 = random.randrange(len(self.bins[bin_2]))        
 
-        # swap houses
-        self.bins[bin_1][house_1], self.bins[bin_2][house_2] = self.bins[bin_2][house_2], self.bins[bin_1][house_1]
+        return house_1, bin_1, house_2, bin_2
+        
+    def try_swap(self, house_1, bin_1, house_2, bin_2):
+        self.swap_houses(house_1, bin_1, house_2, bin_2)
 
         # dit stuk bij constraints check 
         # check constraints, else swap them back and break function
         if self.constraint_check(self.bins[bin_1]) == True and self.constraint_check(self.bins[bin_2]) == True:
             # checks for improvement
             if self.improvement_check(bin_1, bin_2):
-                return True 
-        
-            else: 
-                self.bins[bin_1][house_1], self.bins[bin_2][house_2] = self.bins[bin_2][house_2], self.bins[bin_1][house_1]  
+                return True
+
+            else:
+                self.swap_houses(house_1, bin_1, house_2, bin_2)
                 return False
         else: 
-            self.bins[bin_1][house_1], self.bins[bin_2][house_2] = self.bins[bin_2][house_2], self.bins[bin_1][house_1]  
+            self.swap_houses(house_1, bin_1, house_2, bin_2)
             return False          
+
+    def swap_houses(self, house_1, bin_1, house_2, bin_2):
+        self.bins[bin_1][house_1], self.bins[bin_2][house_2] = self.bins[bin_2][house_2], self.bins[bin_1][house_1]        
 
     # function to start the optimization
     def first_fit(self):
@@ -154,23 +163,64 @@ class HillClimber(object):
 
         return bins
 
-    def random_fit(self): 
+    def random_fit(self):
+
         temp_houses = copy.copy(self.houses)
-        
-        bins = [[] for i in range(len(self.batteries))] 
-        
-        for i in self.houses:
-            house_1 = random.randrange(len(temp_houses))
+
+        bins = [[] for i in range(len(self.batteries))]
+
+        smallest_bin = self.bin_size[0]
+
+        for n in range(len(self.houses)):
+            house_index = random.randrange(len(temp_houses))
             lowest = self.bin_size[0]
             for i, el in enumerate(bins):
                 current = self.size_of_bin(el)
                 if current < lowest:
                     lowest = current
                     bin_place = i
+            bins[bin_place].append(temp_houses[house_index])
+            np.delete(temp_houses, house_index)
+
+        for bucket in range(len(bins)):
+            if not self.constraint_check(bins[bucket]):
+                raise FitError
+        return np.array(bins)
+
+    # def reset(self):
+
+
+
+    def re_random_fit(self): 
+
+        # create copy of houses
+        temp_houses = copy.copy(self.houses)
+            
+        # create bins list
+        bins = [[] for i in range(len(self.batteries))]
+        
+        # define initial lowest capacity left
+        lowest = self.bin_size[0]
+
+        for n in range(len(self.houses)):
+            # pick a random house
+            house_1 = random.randrange(len(temp_houses))
+
+            for i, el in enumerate(bins):
+
+                # check if current bin is lower than first bin
+                current = self.size_of_bin(el)
+                if current < lowest:
+                    lowest = current
+                    bin_place = i
             bins[bin_place].append(temp_houses[house_1])
             np.delete(temp_houses, house_1)
-            self.constraint_check(bins[bin_place])
-        
+
+        if self.constraint_check(bins[bin_place]):
+            return True
+        else:
+
+            self.random_fit()
 
         bins = np.array(bins)
 
@@ -205,13 +255,13 @@ class HillClimber(object):
         and returns the cost. 
         
         """    
-        max_tries = 10000
+        max_tries = 1000
         tries = 0 
         while tries < max_tries:
-            print(tries)
+            # print(tries)
             if tries == max_tries - 1:
                 permutation = self.test_bins()
-                print(permutation)
+                # print(permutation)
                 if len([i for i, j in zip(permutation, [0, 1, 2, 3, 4]) if i == j]) == 5:
                     tries += 1
                 else:
@@ -221,14 +271,16 @@ class HillClimber(object):
                     self.bins = new_bins 
                     tries = 0
 
-            elif not self.pick_swap():
-                tries += 1
             else:
-                tries = 0 
-        current = 0
+                swap = self.pick_swap()
+                if self.try_swap(swap[0], swap[1], swap[2], swap[3]):
+                    tries = 0
+                else:
+                    tries += 1 
+        self.current_value = 0
         for el in self.cost_values:
-            current += el    
-        return current               
+            self.current_value += el    
+        return self.current_value               
 
     def test_bins(self):
         best_swap = copy.copy(self.cost_values)
@@ -244,10 +296,27 @@ class HillClimber(object):
 
         return best_permutation
 
+    def __lt__(self, other):
+        # if isinstance(other, HillClimber):
+        if self.current_value < other.current_value:
+            return True
+        else:
+            return False
 
+        # else:
+            # raise TypeError
 
+    def __gt__(self, other):
+        if isinstance(other, HillClimber):
+            if self.current_value > other.current_value:
+                return True
+            else:
+                return False
+        elif other == None:
+            return True
 
-
+        else:
+            raise TypeError
 
     # save the solution to a csv
     def write_solution(self, best_solution, best_value):
