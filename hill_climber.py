@@ -205,9 +205,24 @@ class HillClimber(object):
         and returns the cost. 
         
         """    
+        max_tries = 10000
         tries = 0 
-        while tries < 10000:
-            if not self.pick_swap():
+        while tries < max_tries:
+            print(tries)
+            if tries == max_tries - 1:
+                permutation = self.test_bins()
+                print(permutation)
+                if len([i for i, j in zip(permutation, [0, 1, 2, 3, 4]) if i == j]) == 5:
+                    tries += 1
+                else:
+                    swapped = []
+                    new_bins = [[] for i in range(5)]
+                    for i, el in enumerate(permutation):
+                        new_bins[i] = self.bins[el]
+                    self.bins = new_bins 
+                    tries = 0
+
+            elif not self.pick_swap():
                 tries += 1
             else:
                 tries = 0 
@@ -218,11 +233,11 @@ class HillClimber(object):
 
     def test_bins(self):
         best_swap = copy.copy(self.cost_values)
-        best_permutation = (0, 1, 2, 3, 4)
+        best_permutation = [0, 1, 2, 3, 4]
         for el in itertools.permutations(range(5), len(range(5))):
             current = []
-            for i, bin in enumerate(self.bins):
-                current.append(self.mean_distance_check(bin, el[i]))
+            for i, bucket in enumerate(self.bins):
+                current.append(self.mean_distance_check(bucket, el[i]))
                 # kijken welke waarde je krijgt en dan de beste steeds opslaan, die waarde returnen en oproepen in climbing function
             if sum(current) < sum(best_swap):
                 best_swap = current
@@ -253,7 +268,7 @@ if __name__ == '__main__':
     batteries = data_structure.read_csv(CSV_BATTERIES)
 
     solutions = []
-    for i in range(15):
+    for i in range(1):
         hill = HillClimber(houses, batteries)
         val = hill.climbing()
         hill.write_solution(hill.bins, val)
