@@ -69,3 +69,4 @@ if __name__ == "__main__":
 	houses = read_csv(CSV_FILE_HOUSES, house=True)
 	networklist = read_batteries(CSV_FILE_BATTERIES, houses)
 	print(networklist)
+    mst = Mst(networklist[0])
