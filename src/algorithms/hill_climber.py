@@ -1,5 +1,9 @@
 # hill_climber.py
 
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.getcwd(), '.')))
+
 import data_structure
 import numpy as np
 import random

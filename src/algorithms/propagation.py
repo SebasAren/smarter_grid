@@ -1,4 +1,9 @@
-from hill_climber import HillClimber
+# from hill_climber import HillClimber
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.getcwd(), '.')))
+
+from .hill_climber import HillClimber
 from data_structure import House, Battery, read_csv
 import copy
 
