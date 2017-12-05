@@ -10,6 +10,7 @@ class Propagation(object):
     def __init__(self, houses, batteries, climbers=2):
         self.climber_list = [HillClimber(houses, batteries) for i in range(climbers)]
         self.best = None
+        self.best_value = 0
 
     def climbing(self):
         for i, climber in enumerate(self.climber_list):
@@ -17,30 +18,29 @@ class Propagation(object):
             print('Current iteration: {} of {}.\nValue: {}.'.format(i + 1, len(self.climber_list), climber.current_value))
 
     def find_best(self):
-        for climber in self.climber_list:
-            if not self.best:
-                self.best = copy.copy(climber)
-            elif climber < self.best:
-                self.best = copy.copy(climber)
+        for i, climber in enumerate(self.climber_list):
+            if climber < self.best:
+                self.best = climber
+        self.best = copy.copy(self.best)
         return self.best.current_value
 
-    def create_variance(self, amount=1):
+    def create_variance(self, amount):
         if not self.best:
             raise AttributeError
 
-        swap = self.best.pick_swap()
         for i in range(amount):
+            swap = self.best.pick_swap()
             self.best.swap_houses(swap[0], swap[1], swap[2], swap[3])
 
-    def climb_best(self):
-        return self.best.climbing()
-
-
-    def short_sequence(self):
+    def short_sequence(self, iterations, variations=2):
         self.climbing()
-        self.find_best()
-        self.create_variance()
-        print(self.climb_best())
+        for i in range(iterations):
+            print(self.find_best())
+            self.create_variance(variations)
+            if self.best.loose_climbing():
+                print('HOLY SHIT')
+                self.best.climbing()
+            self.climber_list.append(self.best)
 
 if __name__ == '__main__':
 
@@ -50,5 +50,5 @@ if __name__ == '__main__':
     houses = read_csv(CSV_HOUSES, house=True)
     batteries = read_csv(CSV_BATTERIES)
 
-    test = Propagation(houses, batteries)
-    test.short_sequence()
+    test = Propagation(houses, batteries, climbers=2)
+    test.short_sequence(10)

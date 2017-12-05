@@ -7,6 +7,8 @@ import csv
 import copy
 import itertools
 
+
+TRIES = 1000
 # custom error for contraint checking
 class FitError(Exception):
     pass
@@ -17,8 +19,10 @@ def distance(pos1, pos2):
 
 # create a class for the Hill Climber
 class HillClimber(object):
- 
+
+    # global
     def __init__(self, houses, batteries):
+
 
         # init cost list for later price checking
         self.cost_values = np.array([0 for i in range(len(batteries))])
@@ -121,12 +125,27 @@ class HillClimber(object):
 
         return house_1, bin_1, house_2, bin_2
         
+    def try_loose_swap(self, house_1, bin_1, house_2, bin_2):
+
+        self.swap_houses(house_1, bin_1, house_2, bin_2)
+        if self.improvement_check(bin_1, bin_2):
+            for el in range(len(self.bins)):
+                if self.constraint_check(self.bins[el]):
+                    self.swap_houses(house_1, bin_1, house_2, bin_2)
+                    return False
+            return True
+        else:
+            return False
+
+            
+
     def try_swap(self, house_1, bin_1, house_2, bin_2):
         self.swap_houses(house_1, bin_1, house_2, bin_2)
 
         # dit stuk bij constraints check 
         # check constraints, else swap them back and break function
         if self.constraint_check(self.bins[bin_1]) == True and self.constraint_check(self.bins[bin_2]) == True:
+
             # checks for improvement
             if self.improvement_check(bin_1, bin_2):
                 return True
@@ -134,7 +153,8 @@ class HillClimber(object):
             else:
                 self.swap_houses(house_1, bin_1, house_2, bin_2)
                 return False
-        else: 
+
+        else:
             self.swap_houses(house_1, bin_1, house_2, bin_2)
             return False          
 
@@ -255,7 +275,7 @@ class HillClimber(object):
         and returns the cost. 
         
         """    
-        max_tries = 1000
+        max_tries = TRIES
         tries = 0 
         while tries < max_tries:
             # print(tries)
@@ -279,8 +299,22 @@ class HillClimber(object):
                     tries += 1 
         self.current_value = 0
         for el in self.cost_values:
-            self.current_value += el    
+            self.current_value += el
         return self.current_value               
+
+    def loose_climbing(self):
+        tries = 0 
+        while tries < TRIES:
+            swap = self.pick_swap()
+            if self.try_loose_swap(swap[0], swap[1], swap[2], swap[3]):
+                for el in self.cost_values:
+                    self.current_value += el
+                return True
+            else:
+                tries += 1
+        for el in self.cost_values:
+            self.current_value += el
+        return False
 
     def test_bins(self):
         best_swap = copy.copy(self.cost_values)
@@ -297,11 +331,16 @@ class HillClimber(object):
         return best_permutation
 
     def __lt__(self, other):
-        # if isinstance(other, HillClimber):
-        if self.current_value < other.current_value:
+        if isinstance(other, HillClimber):
+            if self.current_value < other.current_value:
+                return True
+            else:
+                return False
+        elif other == None:
             return True
+
         else:
-            return False
+            raise TypeError
 
         # else:
             # raise TypeError
