@@ -3,6 +3,7 @@
 import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.getcwd(), '.')))
+sys.path.append(os.path.abspath(os.path.join(os.getcwd(), '..')))
 
 import data_structure
 import numpy as np
@@ -12,7 +13,7 @@ import copy
 import itertools
 
 
-TRIES = 1000
+TRIES = 100
 # custom error for contraint checking
 class FitError(Exception):
     pass
@@ -163,7 +164,7 @@ class HillClimber(object):
             return False          
 
     def swap_houses(self, house_1, bin_1, house_2, bin_2):
-        self.bins[bin_1][house_1], self.bins[bin_2][house_2] = self.bins[bin_2][house_2], self.bins[bin_1][house_1]        
+        self.bins[bin_1][house_1], self.bins[bin_2][house_2] = self.bins[bin_2][house_2], self.bins[bin_1][house_1]
 
     # function to start the optimization
     def first_fit(self):
@@ -195,7 +196,7 @@ class HillClimber(object):
 
         smallest_bin = self.bin_size[0]
 
-        for n in range(len(self.houses)):
+        for n in range(len(self.houses) - 1):
             house_index = random.randrange(len(temp_houses))
             lowest = self.bin_size[0]
             for i, el in enumerate(bins):
@@ -363,7 +364,7 @@ class HillClimber(object):
 
     # save the solution to a csv
     def write_solution(self, best_solution, best_value):
-        with open('data/solutions/wijk1/solution_{}.csv'.format(best_value), 'a') as outfile:
+        with open('../../data/solutions/wijk1/solution_{}.csv'.format(best_value), 'a') as outfile:
             writer = csv.writer(outfile)
             for i, el in enumerate(best_solution):
                 for row in el:
@@ -372,8 +373,8 @@ class HillClimber(object):
 
 if __name__ == '__main__':
 
-    CSV_HOUSES = 'data/wijk1_huizen.csv'
-    CSV_BATTERIES = 'data/wijk1_batterijen.csv'
+    CSV_HOUSES = '../../data/wijk1_huizen.csv'
+    CSV_BATTERIES = '../../data/wijk1_batterijen.csv'
 
     houses = data_structure.read_csv(CSV_HOUSES, house=True)
     batteries = data_structure.read_csv(CSV_BATTERIES)
@@ -385,6 +386,4 @@ if __name__ == '__main__':
         hill.write_solution(hill.bins, val)
         solutions.append(val)
 
-    print(solutions)    
-
-    
+    print(solutions)

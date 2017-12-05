@@ -27,14 +27,39 @@ class Mst(object):
 
         pass
 
-    def create_path(self):
-        pass
+    def create_path(self, begin_node, end_node):
+        start = self.nodes[begin_node[0]][begin_node[1]]
+        end = self.nodes[end_node[0]][end_node[1]]
+
+        new_nodes = []
+        width = start.x - end.x
+        if width < 0:
+            for i in range(abs(width)):
+                new_nodes.append(Network((start.x + i), start.y))
+
+        elif width > 0:
+            for i in range(abs(width)):
+                new_nodes.append(Network((start.x - i), start.y))
+
+        height = start.y - end.y
+        if height < 0:
+            for i in range(abs(height)):
+                new_nodes.append(Network(end.x, (start.y + i)))
+        elif height > 0:
+            for i in range(abs(height)):
+                new_nodes.append(Network(end.x, (start.y - i)))
+
+        return new_nodes
 
     def randomize_direction(self):
         pass
 
     def run(self):
-        pass
+        while len(self.nodes) > 1:
+            net_1, net_2 = self.find_shortest_path()
+            self.merge_networks(net_1, net_2)
+            self.create_path(net_1, net_2)
+
 
 # read data
 def read_csv(f, house=False):
