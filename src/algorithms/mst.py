@@ -9,6 +9,7 @@ import csv
 class Mst(object):
     def __init__(self, nodes):
         self.nodes = [nodes[i:i+1] for i in range(0, len(nodes), 1)]
+        self.total_cost = 0
 
     def find_shortest_distance(self):
         shortest_distance = 10000
@@ -22,14 +23,12 @@ class Mst(object):
                         if dist < shortest_distance:
                             shortest_distance = dist
                             shortest_pair = [(n, m), (i, j)]
-                            print(shortest_pair, shortest_distance)
         return (shortest_pair)
 
     def merge_networks(self, networkA, networkB, new_nodes):
     	connected_list = []
     	self.nodes[networkA[0]] = self.nodes[networkA[0]] + self.nodes[networkB[0]] + new_nodes 
     	self.nodes.pop(networkB[0])
-    	print(self.nodes[networkA[0]])
 
 
     def create_path(self, begin_node, end_node):
@@ -74,17 +73,16 @@ class Mst(object):
         pass
 
     def run(self):
-        total_cost = 0
         while len(self.nodes) > 1:
             spots = self.find_shortest_distance()
             new_nodes = self.create_path(spots[0], spots[1])
-            total_cost += len(new_nodes) + 1
+            self.total_cost += len(new_nodes) + 1
             self.merge_networks(spots[0], spots[1], new_nodes)
-        print(total_cost)
+        print(self.total_cost)
 
 
 # read data
-def read_csv(f, house=False):
+def read_houses(f, house=False):
     with open(f) as infile:
         reader = csv.reader(infile)
         rv = [[],[],[],[],[]]
@@ -113,8 +111,7 @@ if __name__ == "__main__":
     CSV_FILE_BATTERIES = '../../data/wijk1_batterijen.csv'
     CSV_FILE_HOUSES = '../../data/solutions/wijk1/solution_2952.csv'
 
-    houses = read_csv(CSV_FILE_HOUSES, house=True)
+    houses = read_houses(CSV_FILE_HOUSES, house=True)
     networklist = read_batteries(CSV_FILE_BATTERIES, houses)
     mst = Mst(networklist[0])
     mst.find_shortest_distance()
-

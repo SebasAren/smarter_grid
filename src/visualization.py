@@ -44,7 +44,7 @@ for house in houses:
 
 for batterie in batteries:
 	x_batteries.append(batterie.position[0])
-	y_batteries.append(batterie.position[1])	
+	y_batteries.append(batterie.position[1])
 
 # lists for colours and numbers of the different batteries
 colours = ["red", "green", "blue", "black", "purple"]
