@@ -1,5 +1,4 @@
 
-from __future__ import absolute_import
 from data_structure import Battery, House
 import data_generator 
 import numpy as np

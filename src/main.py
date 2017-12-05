@@ -25,5 +25,12 @@ if __name__ == '__main__':
     houses = read_csv(CSV_HOUSES, house=True)
     batteries = read_csv(CSV_BATTERIES)
 
-    test = Propagation(houses, batteries, climbers=2)
-    test.short_sequence(10)
+    if sys.argv[1] == 'propagation':
+        propagator = Propagation(houses, batteries, climbers=2)
+        propagator.short_sequence(10)
+
+    elif sys.argv[1] == 'climber':
+        hill = HillClimber(houses, batteries)
+        val = hill.climbing()
+        hill.write_solution(hill.bins, val)
+        solutions.append(val)
