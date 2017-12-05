@@ -23,7 +23,7 @@ class Mst(object):
                             shortest_distance = dist
                             shortest_pair = [(n, m), (i, j)]
                             print(shortest_pair, shortest_distance)
-        return(shortest_pair)
+        return (shortest_pair)
 
     def create_path(self, begin_node, end_node):
         start = self.nodes[begin_node[0]][begin_node[1]]
@@ -31,20 +31,34 @@ class Mst(object):
 
         new_nodes = []
         width = start.x - end.x
+        height = start.y - end.y
+        length = abs(height) + abs(width)
+
+        if length < 1:
+            return None
+
         if width < 0:
-            for i in range(abs(width)):
-                new_nodes.append(Network((start.x + i), start.y))
+            if abs(height) > 0:
+                for i in range(abs(width)):
+                    new_nodes.append(Network((start.x + i), start.y))
+            else:
+                for i in range(abs(width) - 1):
+                    new_nodes.append(Network((start.x + i), start.y))
 
         elif width > 0:
-            for i in range(abs(width)):
-                new_nodes.append(Network((start.x - i), start.y))
+            if abs(height) > 0:
+                for i in range(abs(width)):
+                    new_nodes.append(Network((start.x - i), start.y))
+            else:
+                for i in range(abs(width) - 1):
+                    new_nodes.append(Network((start.x - i), start.y))
 
-        height = start.y - end.y
+
         if height < 0:
-            for i in range(abs(height)):
+            for i in range(abs(height) - 1):
                 new_nodes.append(Network(end.x, (start.y + i)))
         elif height > 0:
-            for i in range(abs(height)):
+            for i in range(abs(height) - 1):
                 new_nodes.append(Network(end.x, (start.y - i)))
 
         return new_nodes
@@ -54,9 +68,9 @@ class Mst(object):
 
     def run(self):
         while len(self.nodes) > 1:
-            net_1, net_2 = self.find_shortest_path()
-            self.merge_networks(net_1, net_2)
-            self.create_path(net_1, net_2)
+            spots = self.find_shortest_path()
+            self.merge_networks(spots[0], spots[1])
+            self.create_path(spots[0], spots[1])
 
 # read data
 def read_csv(f, house=False):
