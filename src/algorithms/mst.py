@@ -7,35 +7,24 @@ from data_structure import Network
 import csv
 
 class Mst(object):
-	def __init__(self, nodes):
-	    self.nodes = [nodes[i:i+1] for i in range(0, len(nodes), 1)]
+    def __init__(self, nodes):
+        self.nodes = [nodes[i:i+1] for i in range(0, len(nodes), 1)]
 
-	def find_shortest_distance(self):
-		shortest_distance = 10000
-		shortest_pair = []
+    def find_shortest_distance(self):
+        shortest_distance = 10000
+        shortest_pair = []
 
-		for n, arr in enumerate(self.nodes):
-			for m, item in enumerate(arr):
-				for i in range(n + 1, len(self.nodes)):
-					for j, other_item in enumerate(self.nodes[i]):
-						dist = item.distance(other_item)
-						if dist < shortest_distance:
-							shortest_distance = dist
-							shortest_pair = [(n, m), (i, j)]
-							print(shortest_pair, shortest_distance)
-		return(shortest_pair)
+        for n, arr in enumerate(self.nodes):
+            for m, item in enumerate(arr):
+                for i in range(n + 1, len(self.nodes)):
+                    for j, other_item in enumerate(self.nodes[i]):
+                        dist = item.distance(other_item)
+                        if dist < shortest_distance:
+                            shortest_distance = dist
+                            shortest_pair = [(n, m), (i, j)]
+                            print(shortest_pair, shortest_distance)
+        return(shortest_pair)
 
-    # def merge_networks(self):
-    #     """
-    #     Merge the network lists together.
-    #     """
-
-    #     pass
-
-    # def create_path(self):
-    #     pass
-
-<<<<<<< HEAD
     def create_path(self, begin_node, end_node):
         start = self.nodes[begin_node[0]][begin_node[1]]
         end = self.nodes[end_node[0]][end_node[1]]
@@ -77,7 +66,7 @@ def read_csv(f, house=False):
 
         # skip headers
         if not house:
-	        next(reader, None)
+            next(reader, None)
         for row in reader:
             entry = Network(int(row[0]), int(row[1]))
             battery = int(row[3])
@@ -96,10 +85,10 @@ def read_batteries(f, houses):
 
 # for test purposes only
 if __name__ == "__main__":
-	CSV_FILE_BATTERIES = '../../data/wijk1_batterijen.csv'
-	CSV_FILE_HOUSES = '../../data/solutions/wijk1/solution_2752.csv'
+    CSV_FILE_BATTERIES = '../../data/wijk1_batterijen.csv'
+    CSV_FILE_HOUSES = '../../data/solutions/wijk1/solution_2952.csv'
 
-	houses = read_csv(CSV_FILE_HOUSES, house=True)
-	networklist = read_batteries(CSV_FILE_BATTERIES, houses)
-	mst = Mst(networklist[0])
-	mst.find_shortest_distance()
+    houses = read_csv(CSV_FILE_HOUSES, house=True)
+    networklist = read_batteries(CSV_FILE_BATTERIES, houses)
+    mst = Mst(networklist[0])
+    mst.find_shortest_distance()

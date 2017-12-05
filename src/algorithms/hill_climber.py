@@ -13,7 +13,7 @@ import copy
 import itertools
 
 
-TRIES = 100
+TRIES = 10000
 # custom error for contraint checking
 class FitError(Exception):
     pass
@@ -196,7 +196,8 @@ class HillClimber(object):
 
         smallest_bin = self.bin_size[0]
 
-        for n in range(len(self.houses) - 1):
+        for n in range(len(self.houses)):
+            print(len(temp_houses))
             house_index = random.randrange(len(temp_houses))
             lowest = self.bin_size[0]
             for i, el in enumerate(bins):
@@ -205,7 +206,7 @@ class HillClimber(object):
                     lowest = current
                     bin_place = i
             bins[bin_place].append(temp_houses[house_index])
-            np.delete(temp_houses, house_index)
+            temp_houses = np.delete(temp_houses, house_index)
 
         for bucket in range(len(bins)):
             if not self.constraint_check(bins[bucket]):
@@ -239,7 +240,7 @@ class HillClimber(object):
                     lowest = current
                     bin_place = i
             bins[bin_place].append(temp_houses[house_1])
-            np.delete(temp_houses, house_1)
+            temp_houses = np.delete(temp_houses, house_1)
 
         if self.constraint_check(bins[bin_place]):
             return True
