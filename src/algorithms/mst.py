@@ -69,7 +69,7 @@ class Mst(object):
 
     def run(self):
         while len(self.nodes) > 1:
-            spots = self.find_shortest_path()
+            spots = self.find_shortest_direction()
             new_nodes = self.create_path(spots[0], spots[1])
             self.merge_networks(spots[0], spots[1], new_nodes)
 
