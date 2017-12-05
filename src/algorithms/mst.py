@@ -10,6 +10,31 @@ class Mst(object):
 	def __init__(self):
 		pass
 
+    def find_shortest_path(self):
+        """
+        Find shortest distance between network elements from different 
+        sub-networks.
+
+        These will then be used to merge them. 
+        """
+        pass
+
+    def merge_networks(self):
+        """
+        Merge the network lists together.
+        """
+
+        pass
+
+    def create_path(self):
+        pass
+
+    def randomize_direction(self):
+        pass
+
+    def run(self):
+        pass
+
 # read data
 def read_csv(f, house=False):
     with open(f) as infile:
