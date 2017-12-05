@@ -142,7 +142,7 @@ class Network(object):
         self.y = y
 
     def __repr__(self):
-        return str(self.x)
+        return str(self.x) + " " + str(self.y)
 
     def distance(self, other):
         if isinstance(other, Network):
