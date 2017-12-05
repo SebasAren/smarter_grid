@@ -27,7 +27,7 @@ class Mst(object):
 
     def merge_networks(self, networkA, networkB, new_nodes):
     	connected_list = []
-    	self.nodes[networkA[0]] = [self.nodes[networkA[0]] + self.nodes[networkB[0]] + new_nodes] 
+    	self.nodes[networkA[0]] = self.nodes[networkA[0]] + self.nodes[networkB[0]] + new_nodes 
     	self.nodes.pop(networkB[0])
     	print(self.nodes[networkA[0]])
 
