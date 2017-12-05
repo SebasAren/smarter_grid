@@ -32,6 +32,7 @@ class Mst(object):
         new_nodes = []
         width = start.x - end.x
         height = start.y - end.y
+        print(height)
         length = abs(height) + abs(width)
 
         if length < 1:
@@ -39,26 +40,26 @@ class Mst(object):
 
         if width < 0:
             if abs(height) > 0:
-                for i in range(abs(width)):
+                for i in range(1, abs(width) + 1):
                     new_nodes.append(Network((start.x + i), start.y))
             else:
-                for i in range(abs(width) - 1):
+                for i in range(1, abs(width)):
                     new_nodes.append(Network((start.x + i), start.y))
 
         elif width > 0:
             if abs(height) > 0:
-                for i in range(abs(width)):
+                for i in range(1, abs(width) + 1):
                     new_nodes.append(Network((start.x - i), start.y))
             else:
-                for i in range(abs(width) - 1):
+                for i in range(1, abs(width)):
                     new_nodes.append(Network((start.x - i), start.y))
 
 
         if height < 0:
-            for i in range(abs(height) - 1):
+            for i in range(1, abs(height)):
                 new_nodes.append(Network(end.x, (start.y + i)))
         elif height > 0:
-            for i in range(abs(height) - 1):
+            for i in range(1, abs(height)):
                 new_nodes.append(Network(end.x, (start.y - i)))
 
         return new_nodes
