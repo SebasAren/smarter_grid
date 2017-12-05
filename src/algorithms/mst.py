@@ -25,6 +25,13 @@ class Mst(object):
                             print(shortest_pair, shortest_distance)
         return (shortest_pair)
 
+    def merge_networks(self, networkA, networkB, new_nodes):
+    	connected_list = []
+    	self.nodes[networkA[0]] = [self.nodes[networkA[0]] + self.nodes[networkB[0]] + new_nodes] 
+    	self.nodes.pop(networkB[0])
+    	print(self.nodes[networkA[0]])
+
+
     def create_path(self, begin_node, end_node):
         start = self.nodes[begin_node[0]][begin_node[1]]
         end = self.nodes[end_node[0]][end_node[1]]
@@ -110,3 +117,4 @@ if __name__ == "__main__":
     networklist = read_batteries(CSV_FILE_BATTERIES, houses)
     mst = Mst(networklist[0])
     mst.find_shortest_distance()
+
