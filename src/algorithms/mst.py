@@ -7,8 +7,9 @@ from data_structure import Network
 import csv
 
 class Mst(object):
-	def __init__(self):
-		pass
+	def __init__(self, nodes):
+		self.nodes = [nodes[i:i+1] for i in range(0, len(nodes), 1)]
+
 
 # read data
 def read_csv(f, house=False):
