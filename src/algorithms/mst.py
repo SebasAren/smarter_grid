@@ -32,7 +32,6 @@ class Mst(object):
         new_nodes = []
         width = start.x - end.x
         height = start.y - end.y
-        print(height)
         length = abs(height) + abs(width)
 
         if length < 1:
@@ -68,10 +67,13 @@ class Mst(object):
         pass
 
     def run(self):
+        total_cost = 0
         while len(self.nodes) > 1:
             spots = self.find_shortest_distance()
             new_nodes = self.create_path(spots[0], spots[1])
+            total_cost += len(new_nodes) + 1
             self.merge_networks(spots[0], spots[1], new_nodes)
+        print(total_cost)
 
 
 # read data
