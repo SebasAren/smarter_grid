@@ -5,6 +5,7 @@ sys.path.append(os.path.abspath(os.path.join(os.getcwd(), '..')))
 
 import math
 from hill_climber import HillClimber
+from mst import Mst
 import data_structure
 import numpy as np
 import random
@@ -18,6 +19,7 @@ class SimAnneal(HillClimber):
         super().__init__(houses, batteries)
         self.temperature = 10000
         self.cooling_rate = 5
+        self.best = []
 
 
     def acceptance(self, new_value, old_value, ):
@@ -28,28 +30,51 @@ class SimAnneal(HillClimber):
 
         return math.exp((new_value - old_value) / self.temperature) - 1
 
+    def mst_check(self, bin_1, bin_2):
+        mst1 = Mst(self.bins[bin_1])
+        mst2 = Mst(self.bins[bin_2])
+        mst1.run()
+        mst2.run()
+        rv = mst1.total_cost + mst2.total_cost
+        return mst1, mst2
+
     def climbing(self):
+        for el in self.bins:
+            mst = Mst(el)
+            mst.run()
+            self.best.append(mst)
+
+        current = copy.copy(self.best)
 
         while self.temperature > 0:
             swap = self.pick_swap()
             
-            old_value = self.mean_distance_check(self.bins[swap[1]], swap[1]) + self.mean_distance_check(self.bins[swap[3]], swap[3])
-            # print(old_value)
+            old_value = current[swap[1]].total_cost + current[swap[3]].total_cost
 
+            # print(old_value)
             self.swap_houses(swap[0], swap[1], swap[2], swap[3])
 
             if not self.constraint_check(self.bins[swap[1]]) or not self.constraint_check(self.bins[swap[3]]):
                 self.swap_houses(swap[0], swap[1], swap[2], swap[3])
 
             else:
-                new_value = self.mean_distance_check(self.bins[swap[1]], swap[1]) +self.mean_distance_check(self.bins[swap[3]], swap[3])
-                
+                solutions = self.mst_check(swap[1], swap[3])
+                new_value = solutions[0].total_cost + solutions[1].total_cost
+
                 chance = self.acceptance(new_value, old_value)
+                self.temperature -= self.cooling_rate
                 if chance >= random.random():
-                    self.temperature -= self.cooling_rate
                     print(self.temperature, chance)
+                    current[swap[1]] = solutions[0]
+                    current[swap[3]] = solutions[1]
+                    total_best = 0
+                    total_current = 0
+                    for i, el in enumerate(current):
+                        total_current += el.total_cost
+                        total_best += self.best[i].total_cost
+
+                        
                 else:
-                    self.temperature -= self.cooling_rate
                     self.swap_houses(swap[0], swap[1], swap[2], swap[3])
 
 if __name__ == '__main__':
@@ -64,7 +89,7 @@ if __name__ == '__main__':
     for i in range(1):
         hill = SimAnneal(houses, batteries)
         val = hill.climbing()
-        hill.write_solution(hill.bins, val)
-        solutions.append(val)
+        # hill.write_solution(hill.bins, val)
+        # solutions.append(val)
 
-    print(solutions)
+    # print(solutions)

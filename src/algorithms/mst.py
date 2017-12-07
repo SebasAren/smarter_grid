@@ -1,4 +1,5 @@
 # minimum_tpanning_tree.py
+
 import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.getcwd(), '.')))
@@ -78,7 +79,7 @@ class Mst(object):
             new_nodes = self.create_path(spots[0], spots[1])
             self.total_cost += len(new_nodes) + 1
             self.merge_networks(spots[0], spots[1], new_nodes)
-        print(self.total_cost)
+        # print(self.total_cost)
 
 
 # read data

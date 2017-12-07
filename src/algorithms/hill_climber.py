@@ -19,8 +19,8 @@ class FitError(Exception):
     pass
 
 # manhattan distance between 2 tuples/lists
-def distance(pos1, pos2):
-    return abs(pos1[0] - pos2[0]) + abs(pos1[1] - pos2[1])
+def distance(pos1x, pos1y, pos2x, pos2y):
+    return abs(pos1x - pos2x) + abs(pos1y - pos2y)
 
 # create a class for the Hill Climber
 class HillClimber(object):
@@ -48,11 +48,11 @@ class HillClimber(object):
             battery.give_id(j)
 
         # set distance of houses to other houses (house.id is index)
-        self.distance_houses = np.array([[distance(i.position, j.position) for\
+        self.distance_houses = np.array([[distance(i.x, i.y, j.x, j.y) for\
             i in self.houses] for j in self.houses])
 
         # distance_batteries[battery.id][house.id]
-        self.distance_batteries = np.array([[distance(i.position, j.position)\
+        self.distance_batteries = np.array([[distance(i.x, i.y, j.x, j.y)\
             for i in self.houses] for j in self.batteries])
 
         # define a bin_size (TODO: make it work with different batteries)

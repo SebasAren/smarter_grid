@@ -147,6 +147,8 @@ class Network(object):
     def distance(self, other):
         if isinstance(other, Network):
             return abs(self.x - other.x) + abs(self.y - other.y)
+        if isinstance(other, House):
+            return abs(self.x - other.x) + abs(self.y - other.y)
         else:
             raise TypeError
 
@@ -157,7 +159,8 @@ class Battery(object):
     def __init__(self, x, y, capacity):
         self.capacity_original = capacity
         self.capacity = capacity
-        self.position = [x, y]
+        self.x = x
+        self.y = y
         self.houses = []
 
     def give_id(self, i):
@@ -189,13 +192,21 @@ class Battery(object):
 
 class House(object):
     def __init__(self, x, y, power):
-        self.position = (x, y)
+        self.x = x
+        self.y = y
         self.power = power
         self.bat_id = 0
 
     def give_id(self, i):
         self.id = i
 
+    def distance(self, other):
+        if isinstance(other, Network):
+            return abs(self.x - other.x) + abs(self.y - other.y)
+        if isinstance(other, House):
+            return abs(self.x - other.x) + abs(self.y - other.y)
+        else:
+            raise TypeError
 
     def __eq__(self, other):
         if isinstance(other, House):
