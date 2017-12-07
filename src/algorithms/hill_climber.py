@@ -92,18 +92,6 @@ class HillClimber(object):
             cost += total_house / (count + 1)
         
         return cost
-
-    # check the total minimum distance of a bin, NIET GEBRUIKT
-    def distance_check(self, bucket, battery_id):
-        cost_values = 0
-        for i, house in enumerate(bucket):
-            smallest = self.distance_batteries[battery_id][house.id]
-            for j in range(i + 1, len(bucket)):
-                if self.distance_houses[house.id][bucket[j].id] < smallest:
-                    smallest = self.distance_houses[house.id][bucket[j].id]
-            cost_values += smallest
-        return cost_values
-
     
     def improvement_check(self, bin_1, bin_2):    
          
@@ -188,6 +176,7 @@ class HillClimber(object):
 
         return bins
 
+    # function to randomly fit the bins
     def random_fit(self):
 
         temp_houses = copy.copy(self.houses)
@@ -211,47 +200,8 @@ class HillClimber(object):
         for bucket in range(len(bins)):
             if not self.constraint_check(bins[bucket]):
                 raise FitError
-        return np.array(bins)
+        return np.array(bins)      
 
-    # def reset(self):
-
-
-
-    def re_random_fit(self): 
-
-        # create copy of houses
-        temp_houses = copy.copy(self.houses)
-            
-        # create bins list
-        bins = [[] for i in range(len(self.batteries))]
-        
-        # define initial lowest capacity left
-        lowest = self.bin_size[0]
-
-        for n in range(len(self.houses)):
-            # pick a random house
-            house_1 = random.randrange(len(temp_houses))
-
-            for i, el in enumerate(bins):
-
-                # check if current bin is lower than first bin
-                current = self.size_of_bin(el)
-                if current < lowest:
-                    lowest = current
-                    bin_place = i
-            bins[bin_place].append(temp_houses[house_1])
-            temp_houses = np.delete(temp_houses, house_1)
-
-        if self.constraint_check(bins[bin_place]):
-            return True
-        else:
-
-            self.random_fit()
-
-        bins = np.array(bins)
-
-        return bins
-      
 
     # run the simulation iterations times and save best values , DOES NOT WORK 
     def run_simulation(self, iterations=25, best_value=10000):

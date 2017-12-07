@@ -17,7 +17,8 @@ class SimAnneal(HillClimber):
 
     def __init__(self, houses, batteries):
         super().__init__(houses, batteries)
-        self.temperature = 10000
+        self.temperature = 1000
+        self.begin_temp = 1000
         self.cooling_rate = 5
         self.best = []
 
@@ -38,7 +39,7 @@ class SimAnneal(HillClimber):
         rv = mst1.total_cost + mst2.total_cost
         return mst1, mst2
 
-    def climbing(self):
+    def anneal(self):
         for el in self.bins:
             mst = Mst(el)
             mst.run()
@@ -46,7 +47,7 @@ class SimAnneal(HillClimber):
 
         current = copy.copy(self.best)
 
-        while self.temperature > 0:
+        for iter_count in range(10000):
             swap = self.pick_swap()
             
             old_value = current[swap[1]].total_cost + current[swap[3]].total_cost
@@ -62,7 +63,9 @@ class SimAnneal(HillClimber):
                 new_value = solutions[0].total_cost + solutions[1].total_cost
 
                 chance = self.acceptance(new_value, old_value)
-                self.temperature -= self.cooling_rate
+                
+                self.temperature = self.begin_temp *  pow((100 / self.begin_temp), iter_count / 10000)
+
                 if chance >= random.random():
                     print(self.temperature, chance)
                     current[swap[1]] = solutions[0]
@@ -72,6 +75,10 @@ class SimAnneal(HillClimber):
                     for i, el in enumerate(current):
                         total_current += el.total_cost
                         total_best += self.best[i].total_cost
+
+                    if total_current < total_best:
+                        print(total_current)
+                        self.best = copy.copy(current)
 
                         
                 else:
@@ -88,8 +95,4 @@ if __name__ == '__main__':
     solutions = []
     for i in range(1):
         hill = SimAnneal(houses, batteries)
-        val = hill.climbing()
-        # hill.write_solution(hill.bins, val)
-        # solutions.append(val)
-
-    # print(solutions)
+        val = hill.anneal()
