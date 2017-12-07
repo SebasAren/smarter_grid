@@ -148,7 +148,7 @@ class HillClimber(object):
         self.swap_houses(house_1, bin_1, house_2, bin_2)
 
         # dit stuk bij constraints check 
-        # check constraints, else swap them back and break function
+        # check constrainhots, else swap them back and break function
         if self.constraint_check(self.bins[bin_1]) == True and self.constraint_check(self.bins[bin_2]) == True:
 
             # checks for improvement
@@ -197,7 +197,7 @@ class HillClimber(object):
         smallest_bin = self.bin_size[0]
 
         for n in range(len(self.houses)):
-            print(len(temp_houses))
+            # print(len(temp_houses))
             house_index = random.randrange(len(temp_houses))
             lowest = self.bin_size[0]
             for i, el in enumerate(bins):

@@ -50,3 +50,5 @@ if __name__ == '__main__':
             mst.append(Mst(network))
             mst[-1].run()
             print(mst[-1].nodes)
+        if sys.argv[2] == 'plot':
+            pass
