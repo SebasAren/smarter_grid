@@ -5,6 +5,8 @@ import numpy as np
 import matplotlib as plt
 import sys
 
+
+# https://stackoverflow.com/questions/8107313/isinstance-and-issubclass-behavior-differently
 class Network(object):
     def __init__(self, x, y):
         self.x = x

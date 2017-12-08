@@ -35,7 +35,7 @@ class HillClimber(object):
 
         # lambda works like a JS 'callback' it returns a value buried 
         # within the data structure
-        self.houses.sort(key = lambda x: x.power, reverse=True)
+        # self.houses.sort(key = lambda x: x.power, reverse=True)
         self.houses = np.array(self.houses)
 
         # give houses id's
@@ -57,6 +57,10 @@ class HillClimber(object):
 
         # define a bin_size (TODO: make it work with different batteries)
         self.bin_size = [self.batteries[0].capacity]
+
+        self.initial_fit()
+
+    def initial_fit(self):
         while True:
             try:
                 self.bins = self.random_fit()
@@ -66,7 +70,6 @@ class HillClimber(object):
 
         for i, el in enumerate(self.bins):
             self.cost_values[i] = self.mean_distance_check(el, i)
-
 
 
     # check total value inside bin

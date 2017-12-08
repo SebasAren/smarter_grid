@@ -13,21 +13,31 @@ import csv
 import copy
 import itertools
 
+
 class SimAnneal(HillClimber):
+    """
+    Simulated annealing algorithm using the hill climber and the 'mst' greedy
+    algorithm. 
+    """
 
-    def __init__(self, houses, batteries):
+    def __init__(self, houses, batteries, temperature=10000, max_iter=10000):
+        """
+        
+        """
         super().__init__(houses, batteries)
-        self.temperature = 1000
-        self.begin_temp = 1000
-        self.cooling_rate = 5
+        self.temperature = temperature
+        self.begin_temp = temperature
         self.best = []
+        self.max_iter = max_iter
 
+    def initial_fit(self):
+        self.bins = [[] for i in range(5)]
+        for i, house in enumerate(houses):
+            self.bins[i // 30].append(house)
 
-    def acceptance(self, new_value, old_value, ):
+    def acceptance(self, new_value, old_value):
         if new_value < old_value:
             return 1.0
-
-        # print(old_value - new_value)
 
         return math.exp((new_value - old_value) / self.temperature) - 1
 
@@ -47,12 +57,9 @@ class SimAnneal(HillClimber):
 
         current = copy.copy(self.best)
 
-        for iter_count in range(10000):
+        for iter_count in range(self.max_iter):
             swap = self.pick_swap()
-            
             old_value = current[swap[1]].total_cost + current[swap[3]].total_cost
-
-            # print(old_value)
             self.swap_houses(swap[0], swap[1], swap[2], swap[3])
 
             if not self.constraint_check(self.bins[swap[1]]) or not self.constraint_check(self.bins[swap[3]]):
@@ -64,7 +71,7 @@ class SimAnneal(HillClimber):
 
                 chance = self.acceptance(new_value, old_value)
                 
-                self.temperature = self.begin_temp *  pow((100 / self.begin_temp), iter_count / 10000)
+                self.temperature = self.begin_temp *  pow((100 / self.begin_temp), iter_count / self.max_iter)
 
                 if chance >= random.random():
                     print(self.temperature, chance)
@@ -79,8 +86,6 @@ class SimAnneal(HillClimber):
                     if total_current < total_best:
                         print(total_current)
                         self.best = copy.copy(current)
-
-                        
                 else:
                     self.swap_houses(swap[0], swap[1], swap[2], swap[3])
 
@@ -88,11 +93,15 @@ if __name__ == '__main__':
 
     CSV_HOUSES = '../../data/wijk1_huizen.csv'
     CSV_BATTERIES = '../../data/wijk1_batterijen.csv'
+    CSV_FILE_HOUSES = '../../data/solutions/wijk1/solution_2752.csv'
 
-    houses = data_structure.read_csv(CSV_HOUSES, house=True)
+    houses = data_structure.read_csv(CSV_FILE_HOUSES, house=True)
     batteries = data_structure.read_csv(CSV_BATTERIES)
 
     solutions = []
     for i in range(1):
         hill = SimAnneal(houses, batteries)
         val = hill.anneal()
+        rv = 0
+        for el in hill.best:
+            rv += el.total_cost
