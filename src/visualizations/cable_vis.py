@@ -33,4 +33,9 @@ class CableVis(object):
     def plot(self):
         for i in range(len(self.lines)):
             self.draw_cable(i)
+
+    def show_plot(self):
         plt.show()
+
+    def save_plot(self, max_iter, cooling, score):
+        pl.savefig('../../grids/{}_{}_{}.png'.format(max_iter, cooling, score))

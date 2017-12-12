@@ -78,15 +78,16 @@ class SimAnneal(HillClimber):
                     print(self.temperature, chance)
                     current[swap[1]] = solutions[0]
                     current[swap[3]] = solutions[1]
-                    total_best = 0
+                    self.total_best = 0
                     total_current = 0
                     for i, el in enumerate(current):
                         total_current += el.total_cost
-                        total_best += self.best[i].total_cost
+                        self.total_best += self.best[i].total_cost
 
-                    if total_current <= total_best:
+                    if total_current <= self.total_best:
                         print(total_current)
                         self.best = copy.copy(current)
+                        self.total_best = total_current
                 else:
                     self.swap_houses(swap[0], swap[1], swap[2], swap[3])
 
@@ -106,6 +107,7 @@ class SimAnneal(HillClimber):
             lines.append(el.lines)
         self.vis = CableVis(lines, self.houses)
         self.vis.plot()
+        self.vis.save_plot(self.max_iter, '999pow', self.total_best)
 
 
 if __name__ == '__main__':
@@ -114,12 +116,12 @@ if __name__ == '__main__':
     CSV_BATTERIES = '../../data/wijk3_batterijen.csv'
     CSV_FILE_HOUSES = '../../data/solutions/wijk1/solution_2752.csv'
 
-    houses = data_structure.read_csv(CSV_HOUSES, house=True)
+    houses = data_structure.read_csv(CSV_FILE_HOUSES, house=True)
     batteries = data_structure.read_csv(CSV_BATTERIES)
 
     solutions = []
     for i in range(1):
-        hill = SimAnneal(houses, batteries, temperature=10, max_iter=10000)
+        hill = SimAnneal(houses, batteries, temperature=10, max_iter=55000)
         val = hill.anneal()
         hill.plot_visualization()
         rv = 0
