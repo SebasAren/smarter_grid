@@ -46,6 +46,18 @@ class Mst(object):
         if length < 1:
             return None
 
+        # heuristics can be added here to decide wheter to equate x or y coordinates first
+        else:
+            self.equate_width(start, end, new_nodes)
+            self.equate_height(start, end, new_nodes)
+            return new_nodes
+
+    # lay cables untill target's x coordinate is reached
+    def equate_width(self, start, end, new_nodes):
+        width = start.x - end.x
+        height = start.y - end.y
+        length = abs(height) + abs(width)
+
         if width < 0:
             if abs(height) > 0:
                 for i in range(1, abs(width) + 1):
@@ -62,6 +74,13 @@ class Mst(object):
                 for i in range(1, abs(width)):
                     new_nodes.append(Network((start.x - i), start.y))
 
+        return new_nodes
+
+    # lay cables untill target's y coordinate is reached
+    def equate_height(self, start, end, new_nodes):
+        width = start.x - end.x
+        height = start.y - end.y
+        length = abs(height) + abs(width)
 
         if height < 0:
             for i in range(1, abs(height)):
