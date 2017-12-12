@@ -70,9 +70,9 @@ class SimAnneal(HillClimber):
 
                 chance = self.acceptance(new_value, old_value)
                 
-                # self.temperature = self.begin_temp *  pow((100 / self.begin_temp), iter_count / self.max_iter)
+                self.temperature = self.begin_temp *  (1 / self.begin_temp ** (iter_count / self.max_iter))
 
-                self.temperature = self.begin_temp * 0.999 ** iter_count
+                # self.temperature = self.begin_temp * 0.999 ** iter_count
 
                 if chance >= random.random():
                     print(self.temperature, chance)
@@ -121,7 +121,7 @@ if __name__ == '__main__':
 
     solutions = []
     for i in range(1):
-        hill = SimAnneal(houses, batteries, temperature=10, max_iter=55000)
+        hill = SimAnneal(houses, batteries, temperature=10, max_iter=100)
         val = hill.anneal()
         hill.plot_visualization()
         rv = 0
