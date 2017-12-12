@@ -69,8 +69,10 @@ class SimAnneal(HillClimber):
                 new_value = solutions[0].total_cost + solutions[1].total_cost
 
                 chance = self.acceptance(new_value, old_value)
+
+                self.temperature = self.begin_temp / math.log1p(iter_count * 4)
                 
-                self.temperature = self.begin_temp *  (1 / self.begin_temp ** (iter_count / self.max_iter))
+                # self.temperature = self.begin_temp *  (1 / self.begin_temp ** (iter_count / self.max_iter))
 
                 # self.temperature = self.begin_temp * 0.999 ** iter_count
 
@@ -107,7 +109,7 @@ class SimAnneal(HillClimber):
             lines.append(el.lines)
         self.vis = CableVis(lines, self.houses)
         self.vis.plot()
-        self.vis.save_plot(self.max_iter, '999pow', self.total_best)
+        self.vis.save_plot(self.max_iter, 'l1p4', self.total_best)
 
 
 if __name__ == '__main__':
@@ -121,7 +123,7 @@ if __name__ == '__main__':
 
     solutions = []
     for i in range(1):
-        hill = SimAnneal(houses, batteries, temperature=10, max_iter=100)
+        hill = SimAnneal(houses, batteries, temperature=10, max_iter=55000)
         val = hill.anneal()
         hill.plot_visualization()
         rv = 0
