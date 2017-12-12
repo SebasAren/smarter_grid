@@ -13,6 +13,7 @@ import csv
 import copy
 import itertools
 import matplotlib.pyplot as plt
+from visualizations.cable_vis import CableVis
 
 
 class SimAnneal(HillClimber):
@@ -71,7 +72,7 @@ class SimAnneal(HillClimber):
                 
                 # self.temperature = self.begin_temp *  pow((100 / self.begin_temp), iter_count / self.max_iter)
 
-                self.temperature = self.begin_temp * 0.99 ** iter_count
+                self.temperature = self.begin_temp * 0.999 ** iter_count
 
                 if chance >= random.random():
                     print(self.temperature, chance)
@@ -99,6 +100,13 @@ class SimAnneal(HillClimber):
         plt.plot(self.x, self.y)
         plt.show()
 
+    def plot_visualization(self):
+        lines = []
+        for el in self.best:
+            lines.append(el.lines)
+        self.vis = CableVis(lines, self.houses)
+        self.vis.plot()
+
 
 if __name__ == '__main__':
 
@@ -111,9 +119,9 @@ if __name__ == '__main__':
 
     solutions = []
     for i in range(1):
-        hill = SimAnneal(houses, batteries, temperature=1000, max_iter=10000)
+        hill = SimAnneal(houses, batteries, temperature=10, max_iter=10000)
         val = hill.anneal()
-        hill.plot_result()
+        hill.plot_visualization()
         rv = 0
         for el in hill.best:
             rv += el.total_cost
