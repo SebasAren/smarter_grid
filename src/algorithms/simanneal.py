@@ -12,6 +12,7 @@ import random
 import csv
 import copy
 import itertools
+import matplotlib.pyplot as plt
 
 
 class SimAnneal(HillClimber):
@@ -20,7 +21,7 @@ class SimAnneal(HillClimber):
     algorithm. 
     """
 
-    def __init__(self, houses, batteries, temperature=10000, max_iter=10000):
+    def __init__(self, houses, batteries, temperature=1000, max_iter=10000):
         """
         
         """
@@ -29,17 +30,14 @@ class SimAnneal(HillClimber):
         self.begin_temp = temperature
         self.best = []
         self.max_iter = max_iter
-
-    def initial_fit(self):
-        self.bins = [[] for i in range(5)]
-        for i, house in enumerate(houses):
-            self.bins[i // 30].append(house)
+        self.x = []
+        self.y = []
 
     def acceptance(self, new_value, old_value):
         if new_value < old_value:
             return 1.0
 
-        return math.exp((new_value - old_value) / self.temperature) - 1
+        return math.exp( -abs(new_value - old_value) / self.temperature)
 
     def mst_check(self, bin_1, bin_2):
         mst1 = Mst(self.bins[bin_1])
@@ -71,7 +69,9 @@ class SimAnneal(HillClimber):
 
                 chance = self.acceptance(new_value, old_value)
                 
-                self.temperature = self.begin_temp *  pow((100 / self.begin_temp), iter_count / self.max_iter)
+                # self.temperature = self.begin_temp *  pow((100 / self.begin_temp), iter_count / self.max_iter)
+
+                self.temperature = self.begin_temp * 0.99 ** iter_count
 
                 if chance >= random.random():
                     print(self.temperature, chance)
@@ -83,11 +83,22 @@ class SimAnneal(HillClimber):
                         total_current += el.total_cost
                         total_best += self.best[i].total_cost
 
-                    if total_current < total_best:
+                    if total_current <= total_best:
                         print(total_current)
                         self.best = copy.copy(current)
                 else:
                     self.swap_houses(swap[0], swap[1], swap[2], swap[3])
+
+                self.x.append(iter_count)
+                y = 0
+                for el in current:
+                    y += el.total_cost
+                self.y.append(y)
+
+    def plot_result(self):
+        plt.plot(self.x, self.y)
+        plt.show()
+
 
 if __name__ == '__main__':
 
@@ -100,8 +111,9 @@ if __name__ == '__main__':
 
     solutions = []
     for i in range(1):
-        hill = SimAnneal(houses, batteries)
+        hill = SimAnneal(houses, batteries, temperature=1000, max_iter=10000)
         val = hill.anneal()
+        hill.plot_result()
         rv = 0
         for el in hill.best:
             rv += el.total_cost

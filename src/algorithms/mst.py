@@ -11,6 +11,7 @@ class Mst(object):
     def __init__(self, nodes):
         self.nodes = [nodes[i:i+1] for i in range(0, len(nodes), 1)]
         self.total_cost = 0
+        self.lines = []
 
     def find_shortest_distance(self):
         shortest_distance = 10000
@@ -40,6 +41,7 @@ class Mst(object):
         width = start.x - end.x
         height = start.y - end.y
         length = abs(height) + abs(width)
+        self.create_lines(start.x, start.y, end.x, end.y)
 
         if length < 1:
             return None
@@ -81,6 +83,9 @@ class Mst(object):
             self.merge_networks(spots[0], spots[1], new_nodes)
         # print(self.total_cost)
 
+    def create_lines(self, x_1, y_1, x_2, y_2):
+        self.lines.append([(x_1, y_1), (x_2, y_1)])
+        self.lines.append([(x_2, y_1), (x_2, y_2)])
 
 # read data
 def read_houses(f, house=False):
