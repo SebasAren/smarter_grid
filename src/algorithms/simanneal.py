@@ -22,7 +22,7 @@ class SimAnneal(HillClimber):
     algorithm. 
     """
 
-    def __init__(self, houses, batteries, wijk, temperature=10, max_iter=10000, cooling='lineair'):
+    def __init__(self, houses, batteries, wijk, temperature=10, max_iter=10000, cooling='lineair', interest=0.99):
         """
         
         """
@@ -35,6 +35,7 @@ class SimAnneal(HillClimber):
         self.y = []
         self.cooling = cooling
         self.wijk = wijk
+        self.interest = interest
 
     def acceptance(self, new_value, old_value):
         if new_value < old_value:
@@ -49,11 +50,21 @@ class SimAnneal(HillClimber):
         iter_count = i / 10000
         self.temperature = self.begin_temp * math.exp(-iter_count) * math.cos(iter_count * 10) ** 2
 
-    def log1p_cooling(self, i, factor):
-        self.temperature = self.begin_temp / math.log1p(iter_count * factor)
+    def log1p_cooling(self, i):
+        self.temperature = self.begin_temp / math.log1p(i * 4)
 
-    def interest_cooling(self, i, interest):
-        self.temperature = self.begin_temp * interest ** iter_count
+    def interest_cooling(self, i):
+        self.temperature = self.begin_temp * self.interest ** i
+
+    def cool_choose(self, i):
+        if self.cooling == 'inter':
+            self.interest_cooling(i)
+        if self.cooling == 'ln':
+            self.log1p_cooling(i)
+        if self.cooling == 'damp':
+            self.damped_cooling(i)
+        if self.cooling == 'lin':
+            self.lin_cooling(i)
 
     def mst_check(self, bin_1, bin_2):
         mst1 = Mst(self.bins[bin_1])
@@ -84,7 +95,7 @@ class SimAnneal(HillClimber):
 
                 chance = self.acceptance(new_value, old_value)
 
-                self.damped_cooling(iter_count)
+                self.cool_choose(iter_count)
 
                 if chance >= random.random():
                     print(self.temperature, chance)
@@ -109,9 +120,11 @@ class SimAnneal(HillClimber):
                     y += el.total_cost
                 self.y.append(y)
 
+
+    # not working
     def plot_result(self):
         plt.plot(self.x, self.y)
-        plt.show()
+        plt.save_plot('../sim_plots/{}_{}_{}.png'.format(self.max_iter, self.cooling, self.total_best))
 
     def plot_visualization(self):
         lines = []

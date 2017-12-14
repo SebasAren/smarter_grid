@@ -17,13 +17,13 @@ run: pip install -r requirements.txt
 ## Usage
 
 ### Hill Climber
-run: python main.py wijk1/wijk2/wijk3 hillclimber
+run: python main.py climber 1/2/3 [iterations]
 
 ### Simulated Annealing
-run: python main.py wijk1/wijk2/wijk3 sim [cooling scheme]
+run: python main.py sim 1/2/3 [cooling scheme] [iterations] [extra]
 
 Cooling schemes:
-* exponential: ex
-* power: pow
+* interest: inter (extra: interest rate)
 * log: ln
-* dampened oscillator: damp
+* damped oscillator: damp
+* linear: lin
