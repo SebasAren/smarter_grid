@@ -11,72 +11,59 @@ class Network(object):
     def __init__(self, x, y):
         self.x = x
         self.y = y
+        self.power = 0
+
+    def distance(self, other):
+        if isinstance(other, Network):
+            return abs(self.x - other.x) + abs(self.y - other.y)
+        else:
+            raise TypeError
 
     def __repr__(self):
         return str(self.x) + " " + str(self.y)
 
-    def distance(self, other):
-        if isinstance(other, Network):
-            return abs(self.x - other.x) + abs(self.y - other.y)
-        if isinstance(other, House):
-            return abs(self.x - other.x) + abs(self.y - other.y)
-        else:
-            raise TypeError
-
-
-class Battery(object):
-    
-    # battery has capacity, position and list of connected houses
-    def __init__(self, x, y, capacity):
-        self.capacity_original = capacity
-        self.capacity = capacity
-        self.x = x
-        self.y = y
-
-    def give_id(self, i):
-        self.id = i
-
-    def __repr__(self):
-        return str(self.capacity_original)
-
-class House(object):
-    def __init__(self, x, y, power):
-        self.x = x
-        self.y = y
-        self.power = power
-        self.bat_id = 0
-
-    def give_id(self, i):
-        self.id = i
-
-    def distance(self, other):
-        if isinstance(other, Network):
-            return abs(self.x - other.x) + abs(self.y - other.y)
-        if isinstance(other, House):
-            return abs(self.x - other.x) + abs(self.y - other.y)
-        else:
-            raise TypeError
 
     def __eq__(self, other):
-        if isinstance(other, House):
+        if isinstance(other, Network):
             return self.power == other.power
 
     def __lt__(self, other):
-        if isinstance(other, House):
+        if isinstance(other, Network):
             return self.power < other.power
 
     def __gt__(self, other):
-        if isinstance(other, House):
+        if isinstance(other, Network):
             return self.power > other.power
 
     def __repr__(self):
         return str(self.power)
 
-    def __add__(self, other):
-        if isinstance(other, House):
-            return self.power + other.power
-        else:
-            return self.power + other
+    # def __add__(self, other):
+    #     if isinstance(other, Network):
+    #         return self.power + other.power
+    #     elif isinstance(other, float):
+    #         return self.power + other
+
+
+class Battery(Network):
+    
+    # battery has capacity, position and list of connected houses
+    def __init__(self, x, y, power):
+        super().__init__(x, y)
+        self.power = power
+        self.capacity = power
+
+    def give_id(self, i):
+        self.id = i
+
+
+class House(Network):
+    def __init__(self, x, y, power):
+        super().__init__(x, y)
+        self.power = power
+
+    def give_id(self, i):
+        self.id = i
 
 # read data
 def read_csv(f, house=False):
