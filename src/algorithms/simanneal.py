@@ -44,7 +44,7 @@ class SimAnneal(HillClimber):
         return math.exp( -abs(new_value - old_value) / self.temperature)
 
     def lin_cooling(self, i):
-        self.temperature = self.begin_temp - (i / max_iter) * self.begin_temp
+        self.temperature = self.begin_temp - (i / self.max_iter) * self.begin_temp
 
     def damped_cooling(self, i):
         iter_count = i / 10000

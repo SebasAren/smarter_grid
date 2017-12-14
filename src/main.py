@@ -8,6 +8,8 @@ sys.path.append(os.path.abspath(os.path.join(os.getcwd(), '/algorithms')))
 
 from data_structure import Battery, House, read_csv
 from algorithms.simanneal import SimAnneal
+import pickle
+import random
 
 WIDTH = 1
 HEIGHT = 2
@@ -31,8 +33,12 @@ if __name__ == '__main__':
             anneal = SimAnneal(houses, batteries, sys.argv[2], cooling=sys.argv[3], max_iter=int(sys.argv[4]))
 
         else:
-            anneal = SimAnneal(houses, batteries, sys.argv[2], cooling=sys.argv[3], max_iter=int(sys.argv[4], interest=float(sys.argv[5])))
+            anneal = SimAnneal(houses, batteries, sys.argv[2], cooling=sys.argv[3], max_iter=int(sys.argv[4], interest=float(sys.argv[5])))            
         try:
             anneal.anneal()
         finally:
             anneal.plot_visualization()
+            file = random.randrange(500)
+            with open('../objects/{}.obj'.format(file), 'wb') as f:
+                pickle.dump(anneal, f)
+                print(file)

@@ -38,6 +38,8 @@ class Battery(Network):
     def __init__(self, x, y, power):
         super().__init__(x, y)
         self.power = power
+
+        # backwards compatabilty
         self.capacity = power
 
     def give_id(self, i):
