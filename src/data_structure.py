@@ -1,7 +1,6 @@
 # data_structure.py
 
 import csv
-import sys
 
 
 class Network(object):

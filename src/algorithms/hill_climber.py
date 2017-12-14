@@ -8,13 +8,10 @@ sys.path.append(os.path.abspath(os.path.join(os.getcwd(), '..')))
 import data_structure
 import numpy as np
 import random
-import csv
 import copy
 import itertools
 
-TRIES = 10000
-
-# custom error for contraint checking
+# custom error for initial fit
 class FitError(Exception):
     pass
 
@@ -24,19 +21,16 @@ def distance(pos1x, pos1y, pos2x, pos2y):
 
 # create a class for the Hill Climber
 class HillClimber(object):
+    """
+    Class used to create the behaviour of a hill climber. This is used in the
+    simuated annealing class.
+    """
 
-    # global
     def __init__(self, houses, batteries):
-
 
         # init cost list for later price checking
         self.cost_values = np.array([0 for i in range(len(batteries))])
-        self.houses = houses
-
-        # lambda works like a JS 'callback' it returns a value buried 
-        # within the data structure
-        # self.houses.sort(key = lambda x: x.power, reverse=True)
-        self.houses = np.array(self.houses)
+        self.houses = np.array(houses)
 
         # give houses id's
         for i, house in enumerate(self.houses):
@@ -226,6 +220,10 @@ class HillClimber(object):
         return self.current_value               
 
     def test_bins(self):
+        """
+        Used to return the permutation of batteries in which the 
+        """
+
         best_swap = copy.copy(self.cost_values)
         best_permutation = [0, 1, 2, 3, 4]
         for el in itertools.permutations(range(5), len(range(5))):

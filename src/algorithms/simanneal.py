@@ -31,8 +31,12 @@ class SimAnneal(HillClimber):
         self.begin_temp = temperature
         self.best = []
         self.max_iter = max_iter
+
+        # used for later plat of variance
         self.x = []
         self.y = []
+
+        # 
         self.cooling = cooling
         self.wijk = wijk
         self.interest = interest

@@ -1,12 +1,11 @@
 # data_generator.py
 #
 # Will generate randomized input data for the smart grid problem
+# Not actually used
 
-from __future__ import absolute_import
 import random
 import sys
 import math
-
 
 # CONSTANTS
 MAXPOWER = 1000

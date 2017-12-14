@@ -6,7 +6,8 @@ import sys
 import matplotlib.pyplot as plt
 import csv
 
-class visualization(object):
+class Visualization(object):
+
     # read data
     def read_csv(f, house=False):
         with open(f) as infile:
