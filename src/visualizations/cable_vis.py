@@ -38,5 +38,5 @@ class CableVis(object):
     def show_plot(self):
         plt.show()
 
-    def save_plot(self, max_iter, cooling, score):
-        pl.savefig('../../grids/{}_{}_{}.png'.format(max_iter, cooling, score))
+    def save_plot(self, max_iter, cooling, score, wijk):
+        pl.savefig('../grids/wijk{}/{}_{}_{}.png'.format(wijk, max_iter, cooling, score))

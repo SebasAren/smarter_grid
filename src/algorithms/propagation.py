@@ -1,4 +1,5 @@
-# from hill_climber import HillClimber
+# This was a failed side project
+
 import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.getcwd(), '.')))

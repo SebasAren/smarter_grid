@@ -12,8 +12,8 @@ import csv
 import copy
 import itertools
 
-
 TRIES = 10000
+
 # custom error for contraint checking
 class FitError(Exception):
     pass
@@ -120,21 +120,7 @@ class HillClimber(object):
         house_1 = random.randrange(len(self.bins[bin_1]))
         house_2 = random.randrange(len(self.bins[bin_2]))        
 
-        return house_1, bin_1, house_2, bin_2
-        
-    def try_loose_swap(self, house_1, bin_1, house_2, bin_2):
-
-        self.swap_houses(house_1, bin_1, house_2, bin_2)
-        if self.improvement_check(bin_1, bin_2):
-            for el in range(len(self.bins)):
-                if self.constraint_check(self.bins[el]):
-                    self.swap_houses(house_1, bin_1, house_2, bin_2)
-                    return False
-            return True
-        else:
-            return False
-
-            
+        return house_1, bin_1, house_2, bin_2    
 
     def try_swap(self, house_1, bin_1, house_2, bin_2):
         self.swap_houses(house_1, bin_1, house_2, bin_2)
@@ -206,29 +192,6 @@ class HillClimber(object):
                 raise FitError
         return bins
 
-
-    # run the simulation iterations times and save best values , DOES NOT WORK 
-    def run_simulation(self, iterations=25, best_value=10000):
-        best_solution = []
-        for i in range(iterations):
-            self.bins = self.random_fit()
-            tries = 0
-            while tries < 10000:
-                if not self.pick_swap():
-                    tries += 1
-                else:
-                    tries = 0
-            current = 0
-            for el in self.cost_values:
-                current += el
-            if current < best_value:
-                best_value = current
-                best_solution = self.bins
-                self.write_solution(best_solution, best_value)
-            print('Iteration count: {} of {}.'.format(i + 1, iterations))
-
-    
-
     def climbing(self):
         """
         Runs the hill climber only once. Adds the current cost of distribution of the houses
@@ -262,20 +225,6 @@ class HillClimber(object):
             self.current_value += el
         return self.current_value               
 
-    def loose_climbing(self):
-        tries = 0 
-        while tries < TRIES:
-            swap = self.pick_swap()
-            if self.try_loose_swap(swap[0], swap[1], swap[2], swap[3]):
-                for el in self.cost_values:
-                    self.current_value += el
-                return True
-            else:
-                tries += 1
-        for el in self.cost_values:
-            self.current_value += el
-        return False
-
     def test_bins(self):
         best_swap = copy.copy(self.cost_values)
         best_permutation = [0, 1, 2, 3, 4]
@@ -290,32 +239,6 @@ class HillClimber(object):
 
         return best_permutation
 
-    def __lt__(self, other):
-        if isinstance(other, HillClimber):
-            if self.current_value < other.current_value:
-                return True
-            else:
-                return False
-        elif other == None:
-            return True
-
-        else:
-            raise TypeError
-
-        # else:
-            # raise TypeError
-
-    def __gt__(self, other):
-        if isinstance(other, HillClimber):
-            if self.current_value > other.current_value:
-                return True
-            else:
-                return False
-        elif other == None:
-            return True
-
-        else:
-            raise TypeError
 
     # save the solution to a csv
     def write_solution(self, best_solution, best_value):
@@ -324,21 +247,3 @@ class HillClimber(object):
             for i, el in enumerate(best_solution):
                 for row in el:
                     writer.writerow([row.position[0], row.position[1], row.power, i])
-
-
-if __name__ == '__main__':
-
-    CSV_HOUSES = '../../data/wijk1_huizen.csv'
-    CSV_BATTERIES = '../../data/wijk1_batterijen.csv'
-
-    houses = data_structure.read_csv(CSV_HOUSES, house=True)
-    batteries = data_structure.read_csv(CSV_BATTERIES)
-
-    solutions = []
-    for i in range(1):
-        hill = HillClimber(houses, batteries)
-        val = hill.climbing()
-        hill.write_solution(hill.bins, val)
-        solutions.append(val)
-
-    print(solutions)

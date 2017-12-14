@@ -128,13 +128,3 @@ def read_batteries(f, houses):
         for i, row in enumerate(reader):
             houses[i].append(Network(int(row[0]), int(row[1])))
         return houses
-
-# for test purposes only
-if __name__ == "__main__":
-    CSV_FILE_BATTERIES = '../../data/wijk1_batterijen.csv'
-    CSV_FILE_HOUSES = '../../data/solutions/wijk1/solution_2952.csv'
-
-    houses = read_houses(CSV_FILE_HOUSES, house=True)
-    networklist = read_batteries(CSV_FILE_BATTERIES, houses)
-    mst = Mst(networklist[0])
-    mst.find_shortest_distance()

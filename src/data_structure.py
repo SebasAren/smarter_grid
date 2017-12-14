@@ -1,8 +1,6 @@
 # data_structure.py
 
 import csv
-import numpy as np
-import matplotlib as plt
 import sys
 
 
@@ -33,15 +31,6 @@ class Network(object):
     def __gt__(self, other):
         if isinstance(other, Network):
             return self.power > other.power
-
-    # def __repr__(self):
-        # return str(self.power)
-
-    # def __add__(self, other):
-    #     if isinstance(other, Network):
-    #         return self.power + other.power
-    #     elif isinstance(other, float):
-    #         return self.power + other
 
 
 class Battery(Network):
@@ -81,21 +70,3 @@ def read_csv(f, house=False):
                 entry = Battery(int(row[0]), int(row[1]), float(row[2]))
             rv.append(entry)
         return rv
-
-
-# small grid for testing purposes only
-if __name__ == "__main__":
-    # make grid
-    gridsize =  50
-
-    gr = Graph(gridsize)
-
-    nodelist = []
-    for i in range(gridsize * gridsize):
-        nodelist.append(Node(i))
-
-    count = 0
-    for x in range(gridsize):
-        for y in range(gridsize):
-            gr.add_nodes(x, y, nodelist[count])
-            count += 1

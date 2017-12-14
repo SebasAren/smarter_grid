@@ -4,8 +4,8 @@ sys.path.append(os.path.abspath(os.path.join(os.getcwd(), '.')))
 sys.path.append(os.path.abspath(os.path.join(os.getcwd(), '..')))
 
 import math
-from hill_climber import HillClimber
-from mst import Mst
+from algorithms.hill_climber import HillClimber
+from algorithms.mst import Mst
 import data_structure
 import numpy as np
 import random
@@ -22,7 +22,7 @@ class SimAnneal(HillClimber):
     algorithm. 
     """
 
-    def __init__(self, houses, batteries, temperature=1000, max_iter=10000):
+    def __init__(self, houses, batteries, wijk, temperature=10, max_iter=10000, cooling='lineair'):
         """
         
         """
@@ -33,6 +33,8 @@ class SimAnneal(HillClimber):
         self.max_iter = max_iter
         self.x = []
         self.y = []
+        self.cooling = cooling
+        self.wijk = wijk
 
     def acceptance(self, new_value, old_value):
         if new_value < old_value:
@@ -40,11 +42,18 @@ class SimAnneal(HillClimber):
 
         return math.exp( -abs(new_value - old_value) / self.temperature)
 
-    def dampened_cooling(self, i):
+    def lin_cooling(self, i):
+        self.temperature = self.begin_temp - (i / max_iter) * self.begin_temp
 
+    def damped_cooling(self, i):
         iter_count = i / 10000
-
         self.temperature = self.begin_temp * math.exp(-iter_count) * math.cos(iter_count * 10) ** 2
+
+    def log1p_cooling(self, i, factor):
+        self.temperature = self.begin_temp / math.log1p(iter_count * factor)
+
+    def interest_cooling(self, i, interest):
+        self.temperature = self.begin_temp * interest ** iter_count
 
     def mst_check(self, bin_1, bin_2):
         mst1 = Mst(self.bins[bin_1])
@@ -66,8 +75,7 @@ class SimAnneal(HillClimber):
             old_value = current[swap[1]].total_cost + current[swap[3]].total_cost
             self.swap_houses(swap[0], swap[1], swap[2], swap[3])
 
-            # if not self.constraint_check(self.bins[swap[1]]) or not self.constraint_check(self.bins[swap[3]]):
-            if not True:
+            if not self.constraint_check(self.bins[swap[1]]) or not self.constraint_check(self.bins[swap[3]]):
                 self.swap_houses(swap[0], swap[1], swap[2], swap[3])
 
             else:
@@ -76,13 +84,7 @@ class SimAnneal(HillClimber):
 
                 chance = self.acceptance(new_value, old_value)
 
-                self.dampened_cooling(iter_count)
-
-                # self.temperature = self.begin_temp / math.log1p(iter_count * 4)
-                
-                # self.temperature = self.begin_temp *  (1 / self.begin_temp ** (iter_count / self.max_iter))
-
-                # self.temperature = self.begin_temp * 0.999 ** iter_count
+                self.damped_cooling(iter_count)
 
                 if chance >= random.random():
                     print(self.temperature, chance)
@@ -111,28 +113,10 @@ class SimAnneal(HillClimber):
         plt.plot(self.x, self.y)
         plt.show()
 
-    def plot_visualization(self, i=0):
+    def plot_visualization(self):
         lines = []
         for el in self.best:
             lines.append(el.lines)
         self.vis = CableVis(lines, self.houses)
         self.vis.plot()
-        self.vis.save_plot(i, 'damp', self.total_best)
-
-
-if __name__ == '__main__':
-
-    CSV_HOUSES = '../../data/wijk3_huizen.csv'
-    CSV_BATTERIES = '../../data/wijk3_batterijen.csv'
-    CSV_FILE_HOUSES = '../../data/solutions/wijk1/solution_2752.csv'
-
-    houses = data_structure.read_csv(CSV_HOUSES, house=True)
-    batteries = data_structure.read_csv(CSV_BATTERIES)
-
-    solutions = []
-
-    hill = SimAnneal(houses, batteries, temperature=10, max_iter=55000)
-    try:
-        hill.anneal()
-    finally:
-        hill.plot_visualization()
+        self.vis.save_plot(self.max_iter, self.cooling, self.total_best, self.wijk)
