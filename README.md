@@ -18,6 +18,12 @@ run: pip install -r requirements.txt
 
 ### Hill Climber
 run: python main.py wijk1/wijk2/wijk3 hillclimber
-or run: python -i main.py wijk1/wijk2/wijk3 hillclimber
 
-Bins will be stored as hill.bins containing lists of houses connected to certain batteries.
+### Simulated Annealing
+run: python main.py wijk1/wijk2/wijk3 sim [cooling scheme]
+
+Cooling schemes:
+* exponential: ex
+* power: pow
+* log: ln
+* dampened oscillator: damp

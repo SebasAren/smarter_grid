@@ -11,6 +11,7 @@ import pylab as pl
 from matplotlib import collections as mc
 
 class CableVis(object):
+    
     def __init__(self, lines, houses):
         self.lines = lines
         self.fig, self.ax = pl.subplots()

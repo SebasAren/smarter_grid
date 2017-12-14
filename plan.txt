@@ -7,3 +7,10 @@ https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm
 https://www.youtube.com/watch?v=GazC3A4OQTE # Dijkstra's algorithm by computerphile
 https://www.youtube.com/watch?v=ySN5Wnu88nE # A* (A star), uitbreiding van Dijkstra by computerphile
 Als we vanuit de grid werken: paths waar al kabel ligt hebben cost 0
+
+Experimentatie:
+
+Andere wijken
+First fit vs random fit
+Gewoon hill climben
+Geen constraint
