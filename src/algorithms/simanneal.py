@@ -122,16 +122,13 @@ class SimAnneal(HillClimber):
 
 if __name__ == '__main__':
 
-    CSV_HOUSES = '../../data/wijk2_huizen.csv'
-    CSV_BATTERIES = '../../data/wijk2_batterijen.csv'
+    CSV_HOUSES = '../../data/wijk3_huizen.csv'
+    CSV_BATTERIES = '../../data/wijk3_batterijen.csv'
     CSV_FILE_HOUSES = '../../data/solutions/wijk1/solution_2752.csv'
 
     houses = data_structure.read_csv(CSV_HOUSES, house=True)
     batteries = data_structure.read_csv(CSV_BATTERIES)
 
-    print(houses)
-    print(len(houses))
-    print(batteries)
     solutions = []
 
     hill = SimAnneal(houses, batteries, temperature=10, max_iter=55000)

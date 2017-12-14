@@ -22,15 +22,15 @@ class Mst(object):
                 for i in range(n + 1, len(self.nodes)):
                     for j, other_item in enumerate(self.nodes[i]):
                         dist = item.distance(other_item)
-                        if dist < shortest_distance:
+                        if dist <= shortest_distance:
                             shortest_distance = dist
                             shortest_pair = [(n, m), (i, j)]
         return (shortest_pair)
 
     def merge_networks(self, networkA, networkB, new_nodes):
-    	connected_list = []
-    	self.nodes[networkA[0]] = self.nodes[networkA[0]] + self.nodes[networkB[0]] + new_nodes 
-    	self.nodes.pop(networkB[0])
+        connected_list = []
+        self.nodes[networkA[0]] = self.nodes[networkA[0]] + self.nodes[networkB[0]] + new_nodes
+        self.nodes.pop(networkB[0])
 
 
     def create_path(self, begin_node, end_node):
@@ -49,11 +49,13 @@ class Mst(object):
         # heuristics can be added here to decide wheter to equate x or y coordinates first
         else:
             self.equate_width(start, end, new_nodes)
+            # print(new_nodes)
             self.equate_height(start, end, new_nodes)
             return new_nodes
 
     # lay cables untill target's x coordinate is reached
     def equate_width(self, start, end, new_nodes):
+
         width = start.x - end.x
         height = start.y - end.y
         length = abs(height) + abs(width)
@@ -74,8 +76,6 @@ class Mst(object):
                 for i in range(1, abs(width)):
                     new_nodes.append(Network((start.x - i), start.y))
 
-        return new_nodes
-
     # lay cables untill target's y coordinate is reached
     def equate_height(self, start, end, new_nodes):
         width = start.x - end.x
@@ -89,8 +89,6 @@ class Mst(object):
             for i in range(1, abs(height)):
                 new_nodes.append(Network(end.x, (start.y - i)))
 
-        return new_nodes
-
     def randomize_direction(self):
         pass
 
@@ -99,8 +97,8 @@ class Mst(object):
             spots = self.find_shortest_distance()
             new_nodes = self.create_path(spots[0], spots[1])
             self.total_cost += len(new_nodes) + 1
+            # print(self.total_cost)
             self.merge_networks(spots[0], spots[1], new_nodes)
-        # print(self.total_cost)
 
     def create_lines(self, x_1, y_1, x_2, y_2):
         self.lines.append([(x_1, y_1), (x_2, y_1)])

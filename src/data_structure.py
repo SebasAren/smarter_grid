@@ -6,7 +6,6 @@ import matplotlib as plt
 import sys
 
 
-# https://stackoverflow.com/questions/8107313/isinstance-and-issubclass-behavior-differently
 class Network(object):
     def __init__(self, x, y):
         self.x = x
@@ -35,8 +34,8 @@ class Network(object):
         if isinstance(other, Network):
             return self.power > other.power
 
-    def __repr__(self):
-        return str(self.power)
+    # def __repr__(self):
+        # return str(self.power)
 
     # def __add__(self, other):
     #     if isinstance(other, Network):

@@ -70,6 +70,7 @@ class HillClimber(object):
 
         for i, el in enumerate(self.bins):
             self.cost_values[i] = self.mean_distance_check(el, i)
+        
 
 
     # check total value inside bin
@@ -203,7 +204,7 @@ class HillClimber(object):
         for bucket in range(len(bins)):
             if not self.constraint_check(bins[bucket]):
                 raise FitError
-        return np.array(bins)      
+        return bins
 
 
     # run the simulation iterations times and save best values , DOES NOT WORK 
