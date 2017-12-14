@@ -85,7 +85,7 @@ def read_csv(f, house=False):
         rv = []
 
         # skip headers
-        next(reader, None)
+        # next(reader, None)
         for row in reader:
 
             # create either a house or a battery

@@ -40,6 +40,12 @@ class SimAnneal(HillClimber):
 
         return math.exp( -abs(new_value - old_value) / self.temperature)
 
+    def dampened_cooling(self, i):
+
+        iter_count = i / 10000
+
+        self.temperature = self.begin_temp * math.exp(-iter_count) * math.cos(iter_count * 10) ** 2
+
     def mst_check(self, bin_1, bin_2):
         mst1 = Mst(self.bins[bin_1])
         mst2 = Mst(self.bins[bin_2])
@@ -55,13 +61,13 @@ class SimAnneal(HillClimber):
             self.best.append(mst)
 
         current = copy.copy(self.best)
-
         for iter_count in range(self.max_iter):
             swap = self.pick_swap()
             old_value = current[swap[1]].total_cost + current[swap[3]].total_cost
             self.swap_houses(swap[0], swap[1], swap[2], swap[3])
 
-            if not self.constraint_check(self.bins[swap[1]]) or not self.constraint_check(self.bins[swap[3]]):
+            # if not self.constraint_check(self.bins[swap[1]]) or not self.constraint_check(self.bins[swap[3]]):
+            if not True:
                 self.swap_houses(swap[0], swap[1], swap[2], swap[3])
 
             else:
@@ -70,7 +76,9 @@ class SimAnneal(HillClimber):
 
                 chance = self.acceptance(new_value, old_value)
 
-                self.temperature = self.begin_temp / math.log1p(iter_count * 4)
+                self.dampened_cooling(iter_count)
+
+                # self.temperature = self.begin_temp / math.log1p(iter_count * 4)
                 
                 # self.temperature = self.begin_temp *  (1 / self.begin_temp ** (iter_count / self.max_iter))
 
@@ -103,29 +111,28 @@ class SimAnneal(HillClimber):
         plt.plot(self.x, self.y)
         plt.show()
 
-    def plot_visualization(self):
+    def plot_visualization(self, i=0):
         lines = []
         for el in self.best:
             lines.append(el.lines)
         self.vis = CableVis(lines, self.houses)
         self.vis.plot()
-        self.vis.save_plot(self.max_iter, 'l1p4', self.total_best)
+        self.vis.save_plot(i, 'damp', self.total_best)
 
 
 if __name__ == '__main__':
 
     CSV_HOUSES = '../../data/wijk3_huizen.csv'
-    CSV_BATTERIES = '../../data/wijk3_batterijen.csv'
+    CSV_BATTERIES = '../../data/wijk1_batterijen.csv'
     CSV_FILE_HOUSES = '../../data/solutions/wijk1/solution_2752.csv'
 
     houses = data_structure.read_csv(CSV_FILE_HOUSES, house=True)
     batteries = data_structure.read_csv(CSV_BATTERIES)
 
     solutions = []
-    for i in range(1):
-        hill = SimAnneal(houses, batteries, temperature=10, max_iter=55000)
-        val = hill.anneal()
+
+    hill = SimAnneal(houses, batteries, temperature=10, max_iter=55000)
+    try:
+        hill.anneal()
+    finally:
         hill.plot_visualization()
-        rv = 0
-        for el in hill.best:
-            rv += el.total_cost
