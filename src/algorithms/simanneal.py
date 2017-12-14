@@ -7,7 +7,6 @@ import math
 from algorithms.hill_climber import HillClimber
 from algorithms.mst import Mst
 import data_structure
-import numpy as np
 import random
 import csv
 import copy

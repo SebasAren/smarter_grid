@@ -6,7 +6,6 @@ sys.path.append(os.path.abspath(os.path.join(os.getcwd(), '.')))
 sys.path.append(os.path.abspath(os.path.join(os.getcwd(), '..')))
 
 import data_structure
-import numpy as np
 import random
 import copy
 import itertools
@@ -29,25 +28,25 @@ class HillClimber(object):
     def __init__(self, houses, batteries):
 
         # init cost list for later price checking
-        self.cost_values = np.array([0 for i in range(len(batteries))])
-        self.houses = np.array(houses)
+        self.cost_values = [0 for i in range(len(batteries))]
+        self.houses = houses
 
         # give houses id's
         for i, house in enumerate(self.houses):
             house.give_id(i)
 
         # give batteries id's
-        self.batteries = np.array(batteries)
+        self.batteries = batteries
         for j, battery in enumerate(self.batteries):
             battery.give_id(j)
 
         # set distance of houses to other houses (house.id is index)
-        self.distance_houses = np.array([[distance(i.x, i.y, j.x, j.y) for\
-            i in self.houses] for j in self.houses])
+        self.distance_houses = [[distance(i.x, i.y, j.x, j.y) for\
+            i in self.houses] for j in self.houses]
 
         # distance_batteries[battery.id][house.id]
-        self.distance_batteries = np.array([[distance(i.x, i.y, j.x, j.y)\
-            for i in self.houses] for j in self.batteries])
+        self.distance_batteries = [[distance(i.x, i.y, j.x, j.y)\
+            for i in self.houses] for j in self.batteries]
 
         # define a bin_size (TODO: make it work with different batteries)
         self.bin_size = [self.batteries[0].capacity]
@@ -156,7 +155,7 @@ class HillClimber(object):
         except ConstraintError:
             exit('First fit failed!')
 
-        bins = np.array(bins)
+        bins = bins
 
         return bins
 
@@ -179,7 +178,7 @@ class HillClimber(object):
                     lowest = current
                     bin_place = i
             bins[bin_place].append(temp_houses[house_index])
-            temp_houses = np.delete(temp_houses, house_index)
+            temp_houses.pop(house_index)
 
         for bucket in range(len(bins)):
             if not self.constraint_check(bins[bucket]):
