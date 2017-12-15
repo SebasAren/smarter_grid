@@ -46,7 +46,8 @@ class Mst(object):
         self.create_lines(start.x, start.y, end.x, end.y)
 
         if length < 1:
-            return None
+            # wijk3 haa two houses on the same spot
+            return []
 
         # heuristics can be added here to decide wheter to equate x or y coordinates first
         else:
@@ -109,28 +110,3 @@ class Mst(object):
     def create_lines(self, x_1, y_1, x_2, y_2):
         self.lines.append([(x_1, y_1), (x_2, y_1)])
         self.lines.append([(x_2, y_1), (x_2, y_2)])
-
-# read data
-def read_houses(f, house=False):
-    with open(f) as infile:
-        reader = csv.reader(infile)
-        rv = [[],[],[],[],[]]
-
-        # skip headers
-        if not house:
-            next(reader, None)
-        for row in reader:
-            entry = Network(int(row[0]), int(row[1]))
-            battery = int(row[3])
-            rv[battery].append(entry)
-        return rv
-
-def read_batteries(f, houses):
-    with open(f) as infile:
-        reader = csv.reader(infile)
-
-        # skip headers
-        next(reader, None)
-        for i, row in enumerate(reader):
-            houses[i].append(Network(int(row[0]), int(row[1])))
-        return houses
