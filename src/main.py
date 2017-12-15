@@ -11,10 +11,10 @@ from algorithms.simanneal import SimAnneal
 import pickle
 import random
 
-WIDTH = 1
-HEIGHT = 2
-
 def create_file_path(i, type):
+    """
+    Simple function to create a file path.
+    """
     return '../data/wijk{}_{}.csv'.format(i, type)
 
 if __name__ == '__main__':

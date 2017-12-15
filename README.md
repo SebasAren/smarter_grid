@@ -17,7 +17,7 @@ run: pip install -r requirements.txt
 ## Usage
 
 ### Hill Climber
-run: python main.py climber 1/2/3 [iterations]
+run: python main.py hill 1/2/3 [iterations]
 
 ### Simulated Annealing
 run: python main.py sim 1/2/3 [cooling scheme] [iterations] [extra]

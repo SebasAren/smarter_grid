@@ -46,7 +46,8 @@ class Mst(object):
         """
         # merges the different networks into one network 
         connected_list = []
-        self.nodes[networkA[0]] = self.nodes[networkA[0]] + self.nodes[networkB[0]] + new_nodes
+        self.nodes[networkA[0]] = self.nodes[networkA[0]] + \
+        self.nodes[networkB[0]] + new_nodes
         self.nodes.pop(networkB[0])
 
 

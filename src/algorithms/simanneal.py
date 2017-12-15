@@ -78,7 +78,8 @@ class SimAnneal(HillClimber):
         "Damped oscillator" cooling scheme.
         """
         iter_count = i / 10000
-        self.temperature = self.begin_temp * math.exp(-iter_count) * math.cos(iter_count * 10) ** 2
+        self.temperature = self.begin_temp * math.exp(-iter_count) * \
+        math.cos(iter_count * 10) ** 2
 
     def log1p_cooling(self, i):
         """
