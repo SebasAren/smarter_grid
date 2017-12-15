@@ -38,9 +38,11 @@ class Mst(object):
         end = self.nodes[end_node[0]][end_node[1]]
 
         new_nodes = []
-        width = start.x - end.x
-        height = start.y - end.y
-        length = abs(height) + abs(width)
+        # length = abs(height) + abs(width)
+
+        print(start, end)
+        length = start.distance(end)
+
         self.create_lines(start.x, start.y, end.x, end.y)
 
         if length < 1:
@@ -48,18 +50,21 @@ class Mst(object):
 
         # heuristics can be added here to decide wheter to equate x or y coordinates first
         else:
-            self.equate_width(start, end, new_nodes)
+            width = start.x - end.x
+            height = start.y - end.y
+            self.equate_width(start, end, new_nodes, width, height, length)
             # print(new_nodes)
-            self.equate_height(start, end, new_nodes)
+            self.equate_height(start, end, new_nodes, width, height, length)
             return new_nodes
 
     # lay cables untill target's x coordinate is reached
-    def equate_width(self, start, end, new_nodes):
+    def equate_width(self, start, end, new_nodes, width, height, length):
 
-        width = start.x - end.x
-        height = start.y - end.y
-        length = abs(height) + abs(width)
+        # width = start.x - end.x
+        # height = start.y - end.y
+        # length = abs(height) + abs(width)
 
+        # length = start.distance(end)
         if width < 0:
             if abs(height) > 0:
                 for i in range(1, abs(width) + 1):
@@ -77,11 +82,12 @@ class Mst(object):
                     new_nodes.append(Network((start.x - i), start.y))
 
     # lay cables untill target's y coordinate is reached
-    def equate_height(self, start, end, new_nodes):
-        width = start.x - end.x
-        height = start.y - end.y
-        length = abs(height) + abs(width)
+    def equate_height(self, start, end, new_nodes, width, height, length):
+        # width = start.x - end.x
+        # height = start.y - end.y
+        # length = abs(height) + abs(width)
 
+        # length = start.distance(end)
         if height < 0:
             for i in range(1, abs(height)):
                 new_nodes.append(Network(end.x, (start.y + i)))
