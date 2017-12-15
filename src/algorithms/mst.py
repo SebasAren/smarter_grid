@@ -75,6 +75,7 @@ class Mst(object):
         self.create_lines(start.x, start.y, end.x, end.y)
 
         if length < 1:
+            # wijk3 haa two houses on the same spot
             return []
 
         # cable will be created by equating the x coordinates first and then
@@ -144,38 +145,3 @@ class Mst(object):
         """
         self.lines.append([(x_1, y_1), (x_2, y_1)])
         self.lines.append([(x_2, y_1), (x_2, y_2)])
-
-
-def read_houses(f, house=False):
-    """
-    Reads the csv file of the corresponding houses
-    which includes the characteristics of the houses. 
-
-    """
-    with open(f) as infile:
-        reader = csv.reader(infile)
-        rv = [[],[],[],[],[]]
-
-        # skips headers and appends the parameters to the list
-        if not house:
-            next(reader, None)
-        for row in reader:
-            entry = Network(int(row[0]), int(row[1]))
-            battery = int(row[3])
-            rv[battery].append(entry)
-        return rv
-
-def read_batteries(f, houses):
-    """
-    Reads the csv file of the corresponding houses
-    which includes the characteristics of the houses. 
-
-    """
-    with open(f) as infile:
-        reader = csv.reader(infile)
-
-        # skips headers and appends the parameters to list
-        next(reader, None)
-        for i, row in enumerate(reader):
-            houses[i].append(Network(int(row[0]), int(row[1])))
-        return houses
