@@ -54,7 +54,7 @@ class SimAnneal(HillClimber):
         self.temperature = self.begin_temp * math.exp(-iter_count) * math.cos(iter_count * 10) ** 2
 
     def log1p_cooling(self, i):
-        self.temperature = self.begin_temp / math.log1p(i * 4)
+        self.temperature = self.begin_temp / math.log1p(i * 4 + 1)
 
     def interest_cooling(self, i):
         self.temperature = self.begin_temp * self.interest ** i
