@@ -11,20 +11,27 @@ from algorithms.simanneal import SimAnneal
 import pickle
 import random
 
-WIDTH = 1
-HEIGHT = 2
-
 def create_file_path(i, type):
+    """
+    Simple function to create a file path.
+    """
     return '../data/wijk{}_{}.csv'.format(i, type)
 
 if __name__ == '__main__':
 
-    if sys.argv[1] == 'climber':
+    if sys.argv[1] == 'hill':
         houses = read_csv(create_file_path(sys.argv[2], 'huizen'), house=True)
         batteries = read_csv(create_file_path(sys.argv[2], 'batterijen'))
-        hill = SimAnneal(houses, batteries, sys.arg[2], cooling='hill', max_iter=int(sys.argv[3]))
-        hill.write_solution(hill.bins, val)
-        solutions.append(val)
+        anneal = SimAnneal(houses, batteries, sys.argv[2], cooling='lin', max_iter=int(sys.argv[3]))
+        try:
+            anneal.anneal()
+        finally:
+            anneal.plot_visualization()
+            file = random.randrange(500)
+            with open('../objects/{}.obj'.format(file), 'wb') as f:
+                pickle.dump(anneal, f)
+                print(file)
+
 
     elif sys.argv[1] == 'sim':
         houses = read_csv(create_file_path(sys.argv[2], 'huizen'), house=True)
