@@ -97,7 +97,7 @@ class SimAnneal(HillClimber):
         """
         Function to choose the cooling scheme needed based on user input.
         """
-        if self.cooling == 'inter':
+        if self.cooling == 'interest':
             self.interest_cooling(i)
         if self.cooling == 'ln':
             self.log1p_cooling(i)

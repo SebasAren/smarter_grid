@@ -36,11 +36,12 @@ if __name__ == '__main__':
     elif sys.argv[1] == 'sim':
         houses = read_csv(create_file_path(sys.argv[2], 'huizen'), house=True)
         batteries = read_csv(create_file_path(sys.argv[2], 'batterijen'))
-        if sys.argv[3] is not 'interest':
+        if sys.argv[3] != 'interest':
             anneal = SimAnneal(houses, batteries, sys.argv[2], cooling=sys.argv[3], max_iter=int(sys.argv[4]))
 
         else:
-            anneal = SimAnneal(houses, batteries, sys.argv[2], cooling=sys.argv[3], max_iter=int(sys.argv[4], interest=float(sys.argv[5])))            
+            print(float(sys.argv[5]))
+            anneal = SimAnneal(houses, batteries, sys.argv[2], cooling=sys.argv[3], max_iter=int(sys.argv[4]), interest=float(sys.argv[5]))
         try:
             anneal.anneal()
         finally:
