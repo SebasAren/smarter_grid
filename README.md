@@ -29,7 +29,7 @@ the grids map contains the visualizations of the network cables
 the visualizations of the score functions can be found in the map sim_plots
 
 ### src
-the actual code can be found in the src map. This map contains two other maps, one for the algorithms and one 
+the actual code, including main.py can be found in the src map. This map contains two other maps, one for the algorithms and one 
 for the visualizations. 
 
 ## Usage
