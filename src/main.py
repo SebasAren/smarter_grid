@@ -40,12 +40,11 @@ if __name__ == '__main__':
             anneal = SimAnneal(houses, batteries, sys.argv[2], cooling=sys.argv[3], max_iter=int(sys.argv[4]))
 
         else:
-            print(float(sys.argv[5]))
             anneal = SimAnneal(houses, batteries, sys.argv[2], cooling=sys.argv[3], max_iter=int(sys.argv[4]), interest=float(sys.argv[5]))
         try:
             anneal.anneal()
         finally:
-            anneal.plot_visualization()
+            anneal.plot_result()
             file = random.randrange(500)
             with open('../objects/{}.obj'.format(file), 'wb') as f:
                 pickle.dump(anneal, f)

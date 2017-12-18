@@ -3,7 +3,7 @@
 Authors: Sebastiaan Arendsen, Jelle den Haan, Casper van Velzen
 
 ## Description
-placeholder: http://heuristieken.nl/wiki/index.php?title=SmartGrid
+http://heuristieken.nl/wiki/index.php?title=SmartGrid
 
 ## Installation
 
@@ -37,11 +37,17 @@ for the visualizations.
 ### Hill Climber
 run: python main.py hill 1/2/3 [iterations]
 
+### Example
+python main.py hill 3 55000
+
 ### Simulated Annealing
 run: python main.py sim 1/2/3 [cooling scheme] [iterations] [extra]
 
+### Example
+python main.py sim 2 ln 55000
+
 Cooling schemes:
-* interest: interest (extra: interest rate)
+* exponential: interest (extra: interest rate; needs interest rate to work)
 * log: ln
 * damped oscillator: damp
 * linear: lin
