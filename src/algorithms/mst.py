@@ -102,8 +102,7 @@ class Mst(object):
         new_nodes: new network points in order to merge networks.
         width: difference between x-coordinates of the two networks.
         height: difference between y-coordinates of the two networks.
-        length: 
-
+        
         """
         
         # if x coordinates differ, equate x coordinate and add network elements to network
@@ -133,7 +132,6 @@ class Mst(object):
         end: end coordinates of network that will be merged.
         new_nodes: new network points in order to merge networks.
         height: difference between y-coordinates of the two networks.
-        length: 
 
         """
 
