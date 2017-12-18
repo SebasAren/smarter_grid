@@ -3,10 +3,10 @@
 Authors: Sebastiaan Arendsen, Jelle den Haan, Casper van Velzen
 
 ## Description of the case
-The aim goal of this case is to connect houses to batteries. There are 3 departments, each one contains 5 batteries 
+The goal of this case is to connect houses to batteries. There are 3 departments, each one contains 5 batteries 
 and 150 houses. Every house has a unique output and every battery has a fixed capacity. The goal is to connect the 
-houses to the batteries with cables, without exceding the capacity of the battery. Connecting cables costs money, 
-therefore connectig all the houses with a minimum number of cables is desired. Later on, batteries can be placed at different positions and different kind of batteries can be used. For more information about the Smart grid case, click on the link below:
+houses to the batteries with cables, without exceding the capacity of the battery. Connecting cables is expensive. 
+Therefore, connecting all the houses with a minimum number of cables is desired. Later on, batteries can be placed at different positions and different kind of batteries can be used. For more information about the Smart grid case, click on the link below:
 http://heuristieken.nl/wiki/index.php?title=SmartGrid
 
 ## Installation
