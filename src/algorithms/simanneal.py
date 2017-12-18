@@ -230,7 +230,7 @@ class SimAnneal(HillClimber):
                 self.y.append(y)
 
 
-    # not working at the moment, should return a plot of current value vs iterations
+    # returns a plot of current value vs iterations
     def plot_result(self):
         plt.plot(self.x, self.y)
         pl.savefig('../sim_plots/{}_{}_{}.png'.format(self.max_iter, self.cooling, self.total_best))
