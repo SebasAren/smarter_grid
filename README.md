@@ -1,7 +1,5 @@
 # smarter_grid
 
-Authors: Sebastiaan Arendsen, Jelle den Haan, Casper van Velzen
-
 ## Description of the case
 The goal of this case is to connect houses to batteries. There are 3 departments, each one contains 5 batteries 
 and 150 houses. Every house has a unique output and every battery has a fixed capacity. The goal is to connect the 
@@ -55,3 +53,9 @@ Cooling schemes:
 * log: ln
 * damped oscillator: damp
 * linear: lin
+
+
+## Authors: 
+Sebastiaan Arendsen
+Jelle den Haan
+Casper van Velzen
