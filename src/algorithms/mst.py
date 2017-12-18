@@ -75,18 +75,13 @@ class Mst(object):
         # saves all the lines between two coordinates in order to plot the networks
         self.create_lines(start.x, start.y, end.x, end.y)
 
-        if length < 1:
-            # wijk3 haa two houses on the same spot
-            return []
-
         # cable will be created by equating the x coordinates first and then
         # the y coordinates will be equated
-        else:
-            width = start.x - end.x
-            height = start.y - end.y
-            self.equate_width(start, end, new_nodes, width, height, length)
-            self.equate_height(start, end, new_nodes, width, height, length)
-            return new_nodes
+        width = start.x - end.x
+        height = start.y - end.y
+        self.equate_width(start, end, new_nodes, width, height, length)
+        self.equate_height(start, end, new_nodes, width, height, length)
+        return new_nodes
 
     
     def equate_width(self, start, end, new_nodes, width, height, length):
