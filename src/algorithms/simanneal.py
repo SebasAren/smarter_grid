@@ -23,6 +23,7 @@ class SimAnneal(HillClimber):
     """
     Simulated annealing algorithm using the hill climber and the 'mst' greedy
     algorithm. 
+    
     """
 
     def __init__(self, houses, batteries, wijk, temperature=10, max_iter=10000, cooling='lineair', interest=0.99):
@@ -35,7 +36,7 @@ class SimAnneal(HillClimber):
         self.begin_temp = temperature
         self.max_iter = max_iter
 
-        # crete container for best MST objects
+        # create container for best MST objects
         self.best = []
 
         # used for later plot of variance
@@ -53,8 +54,10 @@ class SimAnneal(HillClimber):
         """
         Acceptation chance for the simulated annealing algorithm.
 
+        Variables:
         new_value = new value from hill climber
         old_value = old value from hill climber
+        
         """
 
         if new_value < old_value:
@@ -71,12 +74,20 @@ class SimAnneal(HillClimber):
     def lin_cooling(self, i):
         """
         Linear cooling scheme.
+
+        Variables:
+        i: number of iterations.
+        
         """
         self.temperature = self.begin_temp - (i / self.max_iter) * self.begin_temp
 
     def damped_cooling(self, i):
         """
         "Damped oscillator" cooling scheme.
+
+        Variables:
+        i: number of iterations.
+        
         """
         iter_count = i / 10000
         self.temperature = self.begin_temp * math.exp(-iter_count) * \
@@ -85,18 +96,30 @@ class SimAnneal(HillClimber):
     def log1p_cooling(self, i):
         """
         Logarithmic cooling scheme.
+
+        Variables:
+        i: number of iterations.
+        
         """
         self.temperature = self.begin_temp / math.log1p(i * 4 + 1)
 
     def interest_cooling(self, i):
         """
         Exponential cooling scheme.
+
+        Variables:
+        i: number of iterations.
+        
         """
         self.temperature = self.begin_temp * self.interest ** i
 
     def cool_choose(self, i):
         """
         Function to choose the cooling scheme needed based on user input.
+
+        Variables:
+        i: number of iterations.
+        
         """
         if self.cooling == 'interest':
             self.interest_cooling(i)
@@ -110,6 +133,11 @@ class SimAnneal(HillClimber):
     def mst_check(self, bin_1, bin_2):
         """
         Calculates score based on the MST algorithm.
+
+        Variables:
+        bin_1: network index.
+        bin_2: network index.
+        
         """
         
         mst1 = Mst(self.bins[bin_1])
@@ -122,6 +150,7 @@ class SimAnneal(HillClimber):
     def anneal(self):
         """
         This is the actual method to run the anealing process.
+        
         """
 
         # determine score of first/random fit
@@ -201,7 +230,7 @@ class SimAnneal(HillClimber):
                 self.y.append(y)
 
 
-    # not working atm, should return a plot of current value vs iterations
+    # not working at the moment, should return a plot of current value vs iterations
     def plot_result(self):
         plt.plot(self.x, self.y)
         pl.savefig('../sim_plots/{}_{}_{}.png'.format(self.max_iter, self.cooling, self.total_best))
@@ -209,7 +238,9 @@ class SimAnneal(HillClimber):
     def plot_visualization(self):
         """
         Visualization of the end result.
+        
         """
+        
         lines = []
         for el in self.best:
             lines.append(el.lines)
