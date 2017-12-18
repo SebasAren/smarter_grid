@@ -15,13 +15,17 @@ from matplotlib import collections as mc
 
 class CableVis(object):
     """
-
     Creates a visualization of the different networks.
+    
     """
     
     def __init__(self, lines, houses):
         """
-        intializes the graph.
+        Initializes the graph.
+        
+        Variables:
+        lines: array of tuples containing line segments.
+        houses: list of house objects.
 
         """
         
@@ -45,6 +49,9 @@ class CableVis(object):
     def draw_cable(self, battery_id):
         """
         Draws cables between the two elements in the network.
+        
+        Variable:
+        battery_id: id of the five different batteries.
 
         """
         
@@ -57,6 +64,7 @@ class CableVis(object):
     def plot(self):
         """
         Draws the cable for all the networks.
+        
         """
         
         for i in range(len(self.lines)):
@@ -72,6 +80,12 @@ class CableVis(object):
     def save_plot(self, max_iter, cooling, score, wijk):
         """
         Saves plot of the networks in the appropriate file.
+        
+        Variables:
+        max_iter: number of iterations.
+        cooling: defines which cooling scheme is used.
+        score: total score after running the algorithm.
+        wijk: in order to define which 'wijk' is used.
 
         """
         pl.savefig('../grids/wijk{}/{}_{}_{}.png'.format(wijk, max_iter, cooling, score))

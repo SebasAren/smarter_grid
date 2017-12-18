@@ -18,6 +18,7 @@ class Visualization(object):
         """
         Reads the csv file of the corresponding houses/batteries
         which includes the characteristics of the houses/batteries. 
+        
         """
         with open(f) as infile:
             reader = csv.reader(infile)

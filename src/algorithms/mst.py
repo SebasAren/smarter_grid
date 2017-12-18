@@ -43,6 +43,11 @@ class Mst(object):
         """
         Merges the different networks into one network.
 
+        Variables:
+        networkA: one of the networks that will be merged.
+        networkB: the other network that will be merged.
+        new_nodes: new network points in order to merge the networks.
+
         """
         # merges the different networks into one network 
         connected_list = []
@@ -63,13 +68,16 @@ class Mst(object):
 
         Sends info to create a plot of all the cable networks.
 
+        Variables:
+        begin_node: first node from which path begins.
+        end_node: end node at which the new path ends.
+
         """
         start = self.nodes[begin_node[0]][begin_node[1]]
         end = self.nodes[end_node[0]][end_node[1]]
 
         new_nodes = []
 
-        
         length = start.distance(end)
 
         # saves all the lines between two coordinates in order to plot the networks
@@ -87,6 +95,14 @@ class Mst(object):
     def equate_width(self, start, end, new_nodes, width, height):
         """
         When x coordinates differ, equates x coordinates and adds network elements to network. 
+
+        Variables:
+        start: start coordinates of network that will be merged.
+        end: end coordinates of network that will be merged.
+        new_nodes: new network points in order to merge networks.
+        width: difference between x-coordinates of the two networks.
+        height: difference between y-coordinates of the two networks.
+        length: 
 
         """
         
@@ -110,7 +126,14 @@ class Mst(object):
  
     def equate_height(self, start, end, new_nodes, width, height):
         """
-        When y coordinates differ, equates y coordinates and adds network elements to network. 
+        When y coordinates differ, equates y coordinates and adds network elements to network.
+
+        Variables:
+        start: start coordinates of network that will be merged.
+        end: end coordinates of network that will be merged.
+        new_nodes: new network points in order to merge networks.
+        height: difference between y-coordinates of the two networks.
+        length: 
 
         """
 
@@ -137,6 +160,9 @@ class Mst(object):
     def create_lines(self, x_1, y_1, x_2, y_2):
         """
         Saves all the lines between two coordinates in order to plot the networks
+
+        Variables:
+        x_1, y_1, x_2, y_2: coordinates in order to create the line segments.
         
         """
         self.lines.append([(x_1, y_1), (x_2, y_1)])
