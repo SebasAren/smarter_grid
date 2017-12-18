@@ -75,13 +75,13 @@ class HillClimber(object):
 
     
     def size_of_bin(self, bucket):
-    """
-    Calculates the size of the bins. 
+        """
+        Calculates the size of the bins. 
 
-    Variable:
-    bucket: holds one network.
-    
-    """    
+        Variable:
+        bucket: holds one network.
+        
+        """    
         rv = 0
         for el in bucket:
             rv += el.power
