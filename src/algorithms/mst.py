@@ -79,12 +79,12 @@ class Mst(object):
         # the y coordinates will be equated
         width = start.x - end.x
         height = start.y - end.y
-        self.equate_width(start, end, new_nodes, width, height, length)
-        self.equate_height(start, end, new_nodes, width, height, length)
+        self.equate_width(start, end, new_nodes, width, height)
+        self.equate_height(start, end, new_nodes, width, height)
         return new_nodes
 
     
-    def equate_width(self, start, end, new_nodes, width, height, length):
+    def equate_width(self, start, end, new_nodes, width, height):
         """
         When x coordinates differ, equates x coordinates and adds network elements to network. 
 
@@ -108,7 +108,7 @@ class Mst(object):
                     new_nodes.append(Network((start.x - i), start.y))
 
  
-    def equate_height(self, start, end, new_nodes, width, height, length):
+    def equate_height(self, start, end, new_nodes, width, height):
         """
         When y coordinates differ, equates y coordinates and adds network elements to network. 
 

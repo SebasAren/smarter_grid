@@ -15,6 +15,7 @@ import csv
 import copy
 import itertools
 import matplotlib.pyplot as plt
+import pylab as pl
 from visualizations.cable_vis import CableVis
 
 
@@ -203,7 +204,7 @@ class SimAnneal(HillClimber):
     # not working atm, should return a plot of current value vs iterations
     def plot_result(self):
         plt.plot(self.x, self.y)
-        plt.save_plot('../sim_plots/{}_{}_{}.png'.format(self.max_iter, self.cooling, self.total_best))
+        pl.savefig('../sim_plots/{}_{}_{}.png'.format(self.max_iter, self.cooling, self.total_best))
 
     def plot_visualization(self):
         """
