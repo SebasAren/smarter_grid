@@ -23,6 +23,7 @@ class HillClimber(object):
     """
     Class used to create the behaviour of a hill climber. This is used in the
     simuated annealing class.
+    
     """
 
     def __init__(self, houses, batteries):
@@ -55,7 +56,8 @@ class HillClimber(object):
 
     def initial_fit(self):
         """
-        Fits all houses in bins
+        Fits all houses in bins.
+        
         """
         # try random fit untill valid
         while True:
@@ -71,26 +73,40 @@ class HillClimber(object):
         
 
 
-    # check total value inside bin
+    
     def size_of_bin(self, bucket):
+    """
+    Calculates the size of the bins. 
+
+    Variable:
+    bucket: holds one network.
+    
+    """    
         rv = 0
         for el in bucket:
             rv += el.power
         return rv
 
-    # check contstraint
+   
     def constraint_check(self, bucket, b_type=0):
         """
-        Checks if capcity of bins hasn't been exceeded
+        Checks if capacity of bins has not been exceeded.
+
+        Variable:
+        bucket: holds one network.
+        b_type: -
+        
         """
         if self.size_of_bin(bucket) > self.bin_size[b_type]:
             return False
         else:
             return True
 
+    # obsolete code
     def mean_distance_check(self, bucket, battery_id):
         """
         Checks mean distance between other objects in bucket
+        
         """
         cost = 0
         for i, house in enumerate(bucket):
@@ -101,9 +117,11 @@ class HillClimber(object):
         
         return cost
     
+    # obsolete code
     def improvement_check(self, bin_1, bin_2):
         """
         Checks for lower costs
+        
         """
          
         # check mean distance for two bins
@@ -121,6 +139,7 @@ class HillClimber(object):
     def pick_swap(self):
         """
         Picks random houses to swap (doesn't swap them)
+        
         """
         # pick two random (different) bins to pick houses from
         bin_1 = random.randrange(len(self.bins))
@@ -137,6 +156,11 @@ class HillClimber(object):
     def try_swap(self, house_1, bin_1, house_2, bin_2):
         """
         Swaps two houses if conditions are satisfied
+        
+        Variables: 
+        house_1, house_2: houses that possibly will be swapped.
+        bin_1, bin_2: the bins which contains those houses.
+
         """
         #  swap two houses
         self.swap_houses(house_1, bin_1, house_2, bin_2)
@@ -160,13 +184,19 @@ class HillClimber(object):
     def swap_houses(self, house_1, bin_1, house_2, bin_2):
         """
         Swaps two houses
+
+        Variables: 
+        house_1, house_2: houses that will be swapped.
+        bin_1, bin_2: the bins which contains those houses.
+
         """
         self.bins[bin_1][house_1], self.bins[bin_2][house_2] = self.bins[bin_2][house_2], self.bins[bin_1][house_1]
 
-    # function to start the optimization
+    # obsolete code
     def first_fit(self):
         """
         Greedy method to put houses in bins
+        
         """
 
         # make a list of bins
@@ -194,6 +224,7 @@ class HillClimber(object):
     def random_fit(self):
         """
         Function to randomly fit houses in emptiest bin
+        
         """
 
         temp_houses = copy.copy(self.houses)
@@ -222,6 +253,7 @@ class HillClimber(object):
                 raise FitError
         return bins
 
+    # obsolete code 
     def climbing(self):
         """
         Runs the hill climber only once. Adds the current cost of distribution of the houses
@@ -253,9 +285,11 @@ class HillClimber(object):
             self.current_value += el
         return self.current_value               
 
+    # obsolete code
     def test_bins(self):
         """
         Used to return the permutation of batteries in which the ???
+        
         """
 
         best_swap = copy.copy(self.cost_values)
@@ -271,9 +305,11 @@ class HillClimber(object):
 
         return best_permutation
 
+    # obsolete code
     def write_solution(self, best_solution, best_value):
         """
         Writes solution to csv
+        
         """
 
         with open('../../data/solutions/wijk1/solution_{}.csv'.format(best_value), 'a') as outfile:
